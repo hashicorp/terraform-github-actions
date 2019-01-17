@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.11.10
+FROM hashicorp/terraform:0.11.11
 
 LABEL "com.github.actions.name"="terraform init"
 LABEL "com.github.actions.description"="Run terraform init"
