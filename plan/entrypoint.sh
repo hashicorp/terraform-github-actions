@@ -16,19 +16,38 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
+# Remove "Refreshing Terraform state" details.
+OUTPUT=$(echo "$OUTPUT" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
+
+# Reduce to summary if output line count is greater than 20.
+if [ $(echo "$OUTPUT" | wc -l) -gt 20 ]; then
+    OUTPUT="
+<details><summary>Show Output</summary>
+
+\`\`\`diff
+$OUTPUT
+\`\`\`
+
+</details>
+"
+else
+    OUTPUT="
+\`\`\`diff
+$OUTPUT
+\`\`\`
+"
+fi
+
 COMMENT=""
 
 # If not successful, post failed plan output.
 if [ $SUCCESS -ne 0 ]; then
     COMMENT="#### \`terraform plan\` Failed
-\`\`\`
-$OUTPUT
-\`\`\`"
+$OUTPUT"
 else
     FMT_PLAN=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
-    COMMENT="\`\`\`diff
-$FMT_PLAN
-\`\`\`"
+    COMMENT="#### \`terraform plan\` Success
+$FMT_PLAN"
 fi
 
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
