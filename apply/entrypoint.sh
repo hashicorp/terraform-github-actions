@@ -46,20 +46,6 @@ if [ $SUCCESS -ne 0 ]; then
     COMMENT="#### \`terraform apply\` Failed
 $OUTPUT"
 else
-    # Remove "Refreshing state..." lines by only keeping output after the
-    # delimiter (72 dashes) that represents the end of the refresh stage.
-    # We do this to keep the comment output smaller.
-    if echo "$OUTPUT" | egrep '^-{72}$'; then
-        OUTPUT=$(echo "$OUTPUT" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
-    fi
-
-    # Remove whitespace at the beginning of the line for added/modified/deleted
-    # resources so the diff markdown formatting highlights those lines.
-    OUTPUT=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
-
-    # Call wrap to optionally wrap our output in a collapsible markdown section.
-    OUTPUT=$(wrap "$OUTPUT")
-
     COMMENT="#### \`terraform apply\` Success
 $OUTPUT"
 fi
