@@ -2,8 +2,12 @@
 set -e
 
 MERGED_AT=$(cat /github/workflow/event.json | jq -r .pull_request.merged_at)
+BASE_REF=$(cat /github/workflow/event.json | jq -r .pull_request.base.ref)
+DEFAULT_BRANCH=$(cat /github/workflow/event.json | jq -r .pull_request.base.repo.default_branch)
 echo "$MERGED_AT"
-if [ $MERGED_AT = "null" ]; then
+echo "$BASE_REF"
+echo "$DEFAULT_BRANCH"
+if [ $MERGED_AT = "null" ] && [ $BASE_REF == $DEFAULT_BRANCH]; then
     exit 0
 fi
 
@@ -44,7 +48,7 @@ fi
 
 # Post the comment.
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .repository.issue_comment_url)
+COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
 echo $COMMENTS_URL
 curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 
