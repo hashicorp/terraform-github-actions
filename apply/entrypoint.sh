@@ -1,27 +1,4 @@
 #!/bin/sh
-
-# wrap takes some output and wraps it in a collapsible markdown section if
-# it's over $TF_ACTION_WRAP_LINES long.
-wrap() {
-  if [[ $(echo "$1" | wc -l) -gt ${TF_ACTION_WRAP_LINES:-20} ]]; then
-    echo "
-<details><summary>Show Output</summary>
-
-\`\`\`diff
-$1
-\`\`\`
-
-</details>
-"
-else
-    echo "
-\`\`\`diff
-$1
-\`\`\`
-"
-fi
-}
-
 set -e
 
 cd "${TF_ACTION_WORKING_DIR:-.}"
@@ -42,7 +19,6 @@ fi
 # Build the comment we'll post to the PR.
 COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
-    OUTPUT=$(wrap "$OUTPUT")
     COMMENT="#### \`terraform apply\` Failed
 $OUTPUT"
 else
@@ -56,17 +32,14 @@ else
     # Remove whitespace at the beginning of the line for added/modified/deleted
     # resources so the diff markdown formatting highlights those lines.
     OUTPUT=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
-
-    # Call wrap to optionally wrap our output in a collapsible markdown section.
-    OUTPUT=$(wrap "$OUTPUT")
-
     COMMENT="#### \`terraform apply\` Success
 $OUTPUT"
 fi
 
 # Post the comment.
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .repository.issue_comment_url)
+echo $COMMENTS_URL
 curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 
 exit $SUCCESS
