@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+MERGED_AT=$(cat /github/workflow/event.json | jq -r .pull_request.merged_at)
+echo "$MERGED_AT"
+if [ $MERGED_AT = "null" ]; then
+    exit 0
+fi
+
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
 WORKSPACE=${TF_ACTION_WORKSPACE:-default}
