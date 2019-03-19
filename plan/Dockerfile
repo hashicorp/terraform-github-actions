@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.11.11
+FROM hashicorp/terraform:0.11.13
 
 LABEL "com.github.actions.name"="terraform plan"
 LABEL "com.github.actions.description"="Run terraform plan"
