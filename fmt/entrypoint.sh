@@ -30,7 +30,7 @@ $FILE_DIFF
 "
 done
 
-COMMENT="#### \`terraform fmt\` Failed
+COMMENT="#### ${GITHUB_WORKFLOW} - ${GITHUB_ACTION}:\`terraform fmt\` Failed
 $FMT_OUTPUT
 "
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')

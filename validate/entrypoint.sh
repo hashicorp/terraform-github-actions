@@ -19,7 +19,7 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
-COMMENT="#### \`terraform validate\` Failed
+COMMENT="#### ${GITHUB_WORKFLOW} - ${GITHUB_ACTION}: \`terraform validate\` Failed
 \`\`\`
 $OUTPUT
 \`\`\`"
