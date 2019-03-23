@@ -33,7 +33,7 @@ terraform workspace select "$WORKSPACE"
 PLANFILE=${WORKSPACE}.tfplan
 
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false -out=$PLANFILE $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform apply -no-color $PLANFILE $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
@@ -46,7 +46,7 @@ fi
 COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
-    COMMENT="#### \`terraform plan\` Failed
+    COMMENT="#### \`terraform apply\` Failed
 $OUTPUT"
 else
     # Remove "Refreshing state..." lines by only keeping output after the
@@ -63,7 +63,7 @@ else
     # Call wrap to optionally wrap our output in a collapsible markdown section.
     OUTPUT=$(wrap "$OUTPUT")
 
-    COMMENT="#### \`terraform plan\` Success
+    COMMENT="#### \`terraform apply\` Success
 $OUTPUT"
 fi
 
