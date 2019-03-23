@@ -1,6 +1,5 @@
 # Terraform GitHub Actions
-These official Terraform GitHub Actions allow you to run `terraform fmt`, `validate`
- and `plan` on your pull requests to help you review and validate Terraform changes.
+These official Terraform GitHub Actions allow you to run `terraform fmt`, `validate`, `plan` and `apply` on your pull requests to help you review, validate and apply Terraform changes.
 
 ## Getting Started
 To get started, check out our documentation: [https://www.terraform.io/docs/github-actions/getting-started/](https://www.terraform.io/docs/github-actions/getting-started/).
@@ -18,3 +17,7 @@ Runs `terraform validate` and comments back on error.
 ### Plan Action
 Runs `terraform plan` and comments back with the output.
 <img src="./assets/plan.png" alt="Terraform Plan Action" width="80%" />
+
+### Apply Action
+Runs `terraform apply` and comments back with the output.
+<img src="./assets/apply.png" alt="Terraform Apply Action" width="80%" />
