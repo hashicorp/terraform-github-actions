@@ -26,23 +26,14 @@ set -e
 
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
-if [[ ! -z "$TF_ACTION_TFE_TOKEN" ]]; then
-  cat > ~/.terraformrc << EOF
-credentials "${TF_ACTION_TFE_HOSTNAME:-app.terraform.io}" {
-  token = "$TF_ACTION_TFE_TOKEN"
-}
-EOF
-fi
-
-if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]]; then
-  terraform workspace select "$TF_ACTION_WORKSPACE"
-fi
+WORKSPACE=${TF_ACTION_WORKSPACE:-default}
+terraform workspace select "$WORKSPACE"
 
 # Name the plan file based on selected workspace
 PLANFILE=${WORKSPACE}.tfplan
 
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false -out=$PLANFILE $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform apply -no-color $PLANFILE $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
@@ -55,9 +46,8 @@ fi
 COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
-    COMMENT="#### \`terraform plan\` Failed
-$OUTPUT
-*Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
+    COMMENT="#### \`terraform apply\` Failed
+$OUTPUT"
 else
     # Remove "Refreshing state..." lines by only keeping output after the
     # delimiter (72 dashes) that represents the end of the refresh stage.
@@ -73,9 +63,8 @@ else
     # Call wrap to optionally wrap our output in a collapsible markdown section.
     OUTPUT=$(wrap "$OUTPUT")
 
-    COMMENT="#### \`terraform plan\` Success
-$OUTPUT
-*Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
+    COMMENT="#### \`terraform apply\` Success
+$OUTPUT"
 fi
 
 # Post the comment.
