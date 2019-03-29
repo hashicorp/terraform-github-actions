@@ -26,8 +26,17 @@ set -e
 
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
-WORKSPACE=${TF_ACTION_WORKSPACE:-default}
-terraform workspace select "$WORKSPACE"
+if [[ ! -z "$TF_ACTION_TFE_TOKEN" ]]; then
+  cat > ~/.terraformrc << EOF
+credentials "${TF_ACTION_TFE_HOSTNAME:-app.terraform.io}" {
+  token = "$TF_ACTION_TFE_TOKEN"
+}
+EOF
+fi
+
+if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]]; then
+  terraform workspace select "$TF_ACTION_WORKSPACE"
+fi
 
 set +e
 OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false $*" 2>&1)

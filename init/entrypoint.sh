@@ -2,6 +2,14 @@
 set -e
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
+if [[ ! -z "$TF_ACTION_TFE_TOKEN" ]]; then
+  cat > ~/.terraformrc << EOF
+credentials "${TF_ACTION_TFE_HOSTNAME:-app.terraform.io}" {
+  token = "$TF_ACTION_TFE_TOKEN"
+}
+EOF
+fi
+
 set +e
 OUTPUT=$(sh -c "terraform init -no-color -input=false $*" 2>&1)
 SUCCESS=$?
