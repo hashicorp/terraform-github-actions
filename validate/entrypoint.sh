@@ -2,8 +2,9 @@
 set -e
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
-WORKSPACE=${TF_ACTION_WORKSPACE:-default}
-terraform workspace select "$WORKSPACE"
+if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]]; then
+  terraform workspace select "$TF_ACTION_WORKSPACE"
+fi
 
 set +e
 OUTPUT=$(sh -c "terraform validate -no-color $*" 2>&1)
