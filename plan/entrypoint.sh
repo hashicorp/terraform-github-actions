@@ -53,7 +53,8 @@ COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
     COMMENT="#### \`terraform plan\` Failed
-$OUTPUT"
+$OUTPUT
+*Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 else
     # Remove "Refreshing state..." lines by only keeping output after the
     # delimiter (72 dashes) that represents the end of the refresh stage.
@@ -70,7 +71,8 @@ else
     OUTPUT=$(wrap "$OUTPUT")
 
     COMMENT="#### \`terraform plan\` Success
-$OUTPUT"
+$OUTPUT
+*Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 fi
 
 # Post the comment.
