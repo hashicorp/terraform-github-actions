@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.11.13
+FROM hashicorp/terraform:0.12.0
 
 LABEL "com.github.actions.name"="terraform validate"
 LABEL "com.github.actions.description"="Validate the terraform files in a directory"
@@ -9,7 +9,7 @@ LABEL "repository"="https://github.com/hashicorp/terraform-github-actions"
 LABEL "homepage"="http://github.com/hashicorp/terraform-github-actions"
 LABEL "maintainer"="HashiCorp Terraform Team <terraform@hashicorp.com>"
 
-RUN apk --no-cache add jq
+RUN apk --no-cache add jq curl
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
