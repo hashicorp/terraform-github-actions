@@ -7,7 +7,7 @@ wrap() {
     echo "
 <details><summary>Show Output</summary>
 
-\`\`\`diff
+\`\`\`
 $1
 \`\`\`
 
@@ -15,7 +15,7 @@ $1
 "
 else
     echo "
-\`\`\`diff
+\`\`\`
 $1
 \`\`\`
 "
@@ -39,12 +39,15 @@ if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]
 fi
 
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform apply -no-color -auto-approve -input=false $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
 
-if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
+# If PR_DATA is null, then this is not a pull request event and so there's
+# no where to comment.
+PR_DATA=$(cat /github/workflow/event.json | jq -r .pull_request)
+if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ] || [ "$PR_DATA" = "null" ]; then
     exit $SUCCESS
 fi
 
@@ -52,26 +55,14 @@ fi
 COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
-    COMMENT="#### \`terraform plan\` Failed
+    COMMENT="#### \`terraform apply\` Failed
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 else
-    # Remove "Refreshing state..." lines by only keeping output after the
-    # delimiter (72 dashes) that represents the end of the refresh stage.
-    # We do this to keep the comment output smaller.
-    if echo "$OUTPUT" | egrep '^-{72}$'; then
-        OUTPUT=$(echo "$OUTPUT" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
-    fi
-
-    # Remove whitespace at the beginning of the line for added/modified/deleted
-    # resources so the diff markdown formatting highlights those lines.
-    OUTPUT=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
-
     # Call wrap to optionally wrap our output in a collapsible markdown section.
     OUTPUT=$(wrap "$OUTPUT")
-
-    COMMENT="#### \`terraform plan\` Success
+    COMMENT="#### \`terraform apply\` Success
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
