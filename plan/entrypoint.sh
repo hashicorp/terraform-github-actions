@@ -38,11 +38,8 @@ if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]
   terraform workspace select "$TF_ACTION_WORKSPACE"
 fi
 
-# Name the plan file based on selected workspace
-PLANFILE=${WORKSPACE}.tfplan
-
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false -out=$PLANFILE $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
