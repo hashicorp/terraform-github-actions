@@ -54,6 +54,7 @@ if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
     COMMENT="#### \`terraform plan\` Failed
 $OUTPUT
+
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 else
     # Remove "Refreshing state..." lines by only keeping output after the
@@ -72,6 +73,7 @@ else
 
     COMMENT="#### \`terraform plan\` Success
 $OUTPUT
+
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 fi
 

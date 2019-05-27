@@ -57,12 +57,14 @@ if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
     COMMENT="#### \`terraform apply\` Failed
 $OUTPUT
+
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 else
     # Call wrap to optionally wrap our output in a collapsible markdown section.
     OUTPUT=$(wrap "$OUTPUT")
     COMMENT="#### \`terraform apply\` Success
 $OUTPUT
+
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 fi
 
