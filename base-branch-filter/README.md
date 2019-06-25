@@ -24,7 +24,7 @@ action "merged-prs-filter" {
 
 # Then we use this filter to ensure the branch matches "master".
 action "base-branch-filter" {
-  uses = "hashicorp/terraform-github-actions/base-branc-filter@master"
+  uses = "hashicorp/terraform-github-actions/base-branch-filter@master"
   # We set args to our regex.
   args = "^master$"
   needs = "merged-prs-filter"
