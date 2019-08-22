@@ -1,0 +1,10 @@
+name: 'Terraform Root Action'
+description: 'Testing the new YAML based GitHub actions'
+author: 'HashiCorp, Inc.'
+inputs:
+  terraform_testing:
+    description: 'A test variable'
+    required: true
+runs:
+  using: 'docker'
+  image: './Dockerfile'
