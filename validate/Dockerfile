@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.12.7
+FROM hashicorp/terraform:0.12.8
 
 LABEL "com.github.actions.name"="terraform validate"
 LABEL "com.github.actions.description"="Validate the terraform files in a directory"
