@@ -1,6 +1,0 @@
-name: 'Terraform Plan Action'
-description: 'Testing the new YAML based GitHub actions'
-author: 'HashiCorp, Inc.'
-runs:
-  using: 'docker'
-  image: './init/Dockerfile'

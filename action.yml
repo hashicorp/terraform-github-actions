@@ -1,9 +1,12 @@
-name: 'Terraform Root Action'
-description: 'Testing the new YAML based GitHub actions'
+name: 'Terraform GitHub Actions'
+description: 'Terraform GitHub Actions to do things'
 author: 'HashiCorp, Inc.'
 inputs:
-  terraform_testing:
-    description: 'A test variable'
+  terraform_subcommand:
+    description: 'Terraform subcommand to execute'
+    required: true
+  terraform_version:
+    description: 'Terraform version to install'
     required: true
 runs:
   using: 'docker'

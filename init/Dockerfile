@@ -1,1 +1,0 @@
-FROM hashicorp/terraform:latest
