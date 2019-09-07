@@ -20,10 +20,16 @@ func main() {
 		log.Fatalln("Input terraform_subcommand cannot be empty")
 	}
 	fmt.Printf("INPUT_TERRAFORM_SUBCOMMAND: %s\n", os.Getenv("INPUT_TERRAFORM_SUBCOMMAND"))
-	err := downloadTerraform(os.Getenv("INPUT_TERRAFORM_VERSION"))
-	if err != nil {
-		log.Fatalln("ERROR")
+
+	if os.Getenv("INPUT_TERRAFORM_SUBCOMMAND") != "skip" {
+		fmt.Println("Installing Terraform")
+		err := downloadTerraform(os.Getenv("INPUT_TERRAFORM_VERSION"))
+		if err != nil {
+			log.Fatalln("ERROR")
+		}
+
 	}
+
 	out, err := exec.Command("ls", "-la", "/usr/local/bin").Output()
 	if err != nil {
 		log.Fatalln("ERROR")
