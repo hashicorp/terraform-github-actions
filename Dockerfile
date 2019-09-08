@@ -1,9 +1,7 @@
 FROM golang:1.13-alpine
 
-RUN ["/bin/sh", "-c", "mkdir -p /root/src"]
+COPY ["src", "/go/src/"]
 
-COPY ["/src/*", "/root/src/"]
-
-RUN ["/bin/sh", "-c", "go build -o /usr/local/bin/tfactions /root/src/*"]
+RUN ["/bin/sh", "-c", "go build -o /go/bin/tfactions /go/src/*.go"]
 
 ENTRYPOINT ["tfactions"]

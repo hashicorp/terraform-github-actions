@@ -1,5 +1,5 @@
 name: 'Terraform GitHub Actions'
-description: 'Terraform GitHub Actions to do things'
+description: 'Runs Terraform commands via GitHub Actions'
 author: 'HashiCorp, Inc.'
 inputs:
   terraform_subcommand:

@@ -4,42 +4,33 @@ import (
 	"archive/zip"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 )
 
 func main() {
-	if os.Getenv("INPUT_TERRAFORM_VERSION") == "" {
+	tfVersion := os.Getenv("INPUT_TERRAFORM_VERSION")
+	if tfVersion == "" {
 		log.Fatalln("Input terraform_version cannot be empty")
 	}
-	fmt.Printf("INPUT_TERRAFORM_VERSION: %s\n", os.Getenv("INPUT_TERRAFORM_VERSION"))
-	fmt.Printf("INPUT_TERRAFORM_VERSION (type): %T\n", os.Getenv("INPUT_TERRAFORM_VERSION"))
-	if os.Getenv("INPUT_TERRAFORM_SUBCOMMAND") == "" {
+
+	tfSubcommand := os.Getenv("INPUT_TERRAFORM_SUBCOMMAND")
+	if tfSubcommand == "" {
 		log.Fatalln("Input terraform_subcommand cannot be empty")
 	}
-	fmt.Printf("INPUT_TERRAFORM_SUBCOMMAND: %s\n", os.Getenv("INPUT_TERRAFORM_SUBCOMMAND"))
 
-	if os.Getenv("INPUT_TERRAFORM_SUBCOMMAND") != "skip" {
-		fmt.Println("Installing Terraform")
-		err := downloadTerraform(os.Getenv("INPUT_TERRAFORM_VERSION"))
-		if err != nil {
-			log.Fatalln("ERROR")
-		}
-
-	}
-
-	out, err := exec.Command("ls", "-la", "/usr/local/bin").Output()
+	log.Printf("Installing Terraform v%s", tfVersion)
+	err := installTerraform(tfVersion, "/usr/local/bin")
 	if err != nil {
-		log.Fatalln("ERROR")
+		log.Fatalln(err)
 	}
-	fmt.Printf("%s", out)
 }
 
-func downloadTerraform(version string) error {
+func installTerraform(version string, path string) error {
 	url := fmt.Sprintf("https://releases.hashicorp.com/terraform/%s/terraform_%s_linux_amd64.zip", version, version)
-	filename := fmt.Sprintf("terraform_%s_linux_amd64.zip", version)
+	filename := path + "/terraform_" + version
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -47,28 +38,18 @@ func downloadTerraform(version string) error {
 	}
 	defer resp.Body.Close()
 
-	out, err := os.Create("/tmp" + filename)
+	tmpfile, err := ioutil.TempFile("", "terraform")
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer os.Remove(tmpfile.Name())
 
-	_, err = io.Copy(out, resp.Body)
+	_, err = io.Copy(tmpfile, resp.Body)
 	if err != nil {
 		return err
 	}
 
-	cmd, err := os.Create(fmt.Sprintf("/usr/local/bin/terraform_%s", version))
-	if err != nil {
-		return err
-	}
-	err = cmd.Chmod(0755)
-	if err != nil {
-		return err
-	}
-	defer cmd.Close()
-
-	r, err := zip.OpenReader("/tmp" + filename)
+	r, err := zip.OpenReader(tmpfile.Name())
 	if err != nil {
 		return err
 	}
@@ -76,12 +57,18 @@ func downloadTerraform(version string) error {
 
 	for _, f := range r.File {
 		if f.Name == "terraform" {
-			tf, err := f.Open()
+			rc, err := f.Open()
 			if err != nil {
 				return err
 			}
-			defer tf.Close()
-			_, err = io.Copy(cmd, tf)
+			defer rc.Close()
+
+			content, err := ioutil.ReadAll(rc)
+			if err != nil {
+				return err
+			}
+
+			err = ioutil.WriteFile(filename, content, 0755)
 			if err != nil {
 				return err
 			}
