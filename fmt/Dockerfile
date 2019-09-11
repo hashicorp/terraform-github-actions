@@ -9,7 +9,7 @@ LABEL "repository"="https://github.com/hashicorp/terraform-github-actions"
 LABEL "homepage"="http://github.com/hashicorp/terraform-github-actions"
 LABEL "maintainer"="HashiCorp Terraform Team <terraform@hashicorp.com>"
 
-RUN apk --no-cache add jq curl python
+RUN apk --no-cache add jq curl python3
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
