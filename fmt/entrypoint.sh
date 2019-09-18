@@ -47,7 +47,7 @@ $COMMENT
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*
 "
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT_WRAPPER" '.body = $body')
-COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 
 exit $SUCCESS
