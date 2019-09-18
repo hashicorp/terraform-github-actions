@@ -46,7 +46,7 @@ set -e
 
 # If PR_DATA is null, then this is not a pull request event and so there's
 # no where to comment.
-PR_DATA=$(cat /github/workflow/event.json | jq -r .pull_request)
+PR_DATA=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request)
 if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ] || [ "$PR_DATA" = "null" ]; then
     exit $SUCCESS
 fi
@@ -70,7 +70,7 @@ fi
 
 # Post the comment.
 PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 
 exit $SUCCESS
