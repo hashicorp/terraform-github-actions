@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.12.4
+FROM hashicorp/terraform:0.12.9
 
 LABEL "com.github.actions.name"="terraform fmt"
 LABEL "com.github.actions.description"="Validate terraform files are formatted"
@@ -9,7 +9,7 @@ LABEL "repository"="https://github.com/hashicorp/terraform-github-actions"
 LABEL "homepage"="http://github.com/hashicorp/terraform-github-actions"
 LABEL "maintainer"="HashiCorp Terraform Team <terraform@hashicorp.com>"
 
-RUN apk --no-cache add jq curl
+RUN apk --update --no-cache add jq curl bash
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
