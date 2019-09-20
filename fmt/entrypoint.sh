@@ -1,9 +1,15 @@
 #!/bin/sh
+
+# stripcolors takes some output and removes ANSI color codes.
+stripcolors() {
+  echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
 set -e
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
 set +e
-OUTPUT=$(sh -c "terraform fmt -no-color -check -list -recursive $*" 2>&1)
+OUTPUT=$(sh -c "terraform fmt -check -list -recursive $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
@@ -16,6 +22,7 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
+OUTPUT=$(stripcolors "$OUTPUT")
 if [ $SUCCESS -eq 2 ]; then
     # If it exits with 2, then there was a parse error and the command won't have
     # printed out the files that have failed. In this case we comment back with the
