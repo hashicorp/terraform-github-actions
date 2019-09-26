@@ -1,0 +1,11 @@
+name: 'Terraform Apply Action'
+description: 'Runs terraform apply and comments back on the pull request with the apply output.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'play-circle'
+  color: 'purple'
+outputs:
+  comment:
+    description: 'The comment content'

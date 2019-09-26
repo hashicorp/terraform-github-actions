@@ -1,0 +1,11 @@
+name: 'Terraform Validate Action'
+description: 'Runs terraform validate to validate the terraform files in a directory.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'alert-triangle'
+  color: 'purple'
+outputs:
+  comment:
+    description: 'The comment content'

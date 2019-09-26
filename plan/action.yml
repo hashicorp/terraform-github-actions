@@ -1,0 +1,11 @@
+name: 'Terraform Plan Action'
+description: 'Runs terraform plan and comments back on the pull request with the plan output.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'book-open'
+  color: 'purple'
+outputs:
+  comment:
+    description: 'The comment content'

@@ -1,0 +1,11 @@
+name: 'Terraform Fmt Action'
+description: 'Runs terraform fmt to validate all Terraform files in a directory are in the canonical format. If any files differ, this action will comment back on the pull request with the diffs of each file.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'terminal'
+  color: 'purple'
+outputs:
+  comment:
+    description: 'The comment content'

@@ -1,0 +1,11 @@
+name: 'Terraform Init Action'
+description: 'Runs terraform init to initialize a Terraform working directory. This action will comment back on the pull request on failure.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'download'
+  color: 'purple'
+outputs:
+  comment:
+    description: 'The comment content'

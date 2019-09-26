@@ -59,4 +59,5 @@ $COMMENT
     curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 fi
 
+echo ::set-output name=comment::"$COMMENT"
 exit $SUCCESS
