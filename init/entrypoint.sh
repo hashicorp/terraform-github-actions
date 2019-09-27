@@ -25,7 +25,7 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
-COMMENT="#### \`terraform init\` Failed
+COMMENT="#### \`terraform init\` Failed for \`$TF_ACTION_WORKING_DIRECTORY\`
 \`\`\`
 $OUTPUT
 \`\`\`
