@@ -1,0 +1,19 @@
+name: 'Terraform GitHub Actions'
+description: 'Runs Terraform commands via GitHub Actions'
+author: 'HashiCorp, Inc.'
+inputs:
+  terraform_version:
+    description: 'Terraform version to install'
+    required: true
+  terraform_subcommand:
+    description: 'Terraform subcommand to execute'
+    required: true
+  terraform_working_dir:
+    description: 'Terraform working directory'
+    default: ''
+outputs:
+  fmt:
+    description: 'All incorrectly formatted files'
+runs:
+  using: 'docker'
+  image: './Dockerfile'
