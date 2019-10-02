@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# stripcolors takes some output and removes ANSI color codes.
+stripcolors() {
+  echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
 set -e
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
@@ -7,7 +13,7 @@ if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]
 fi
 
 set +e
-OUTPUT=$(sh -c "terraform validate -no-color $*" 2>&1)
+OUTPUT=$(sh -c "terraform validate $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
@@ -20,6 +26,7 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
+OUTPUT=$(stripcolors "$OUTPUT")
 COMMENT="#### \`terraform validate\` Failed
 \`\`\`
 $OUTPUT
