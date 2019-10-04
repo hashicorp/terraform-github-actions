@@ -56,27 +56,30 @@ if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ] || [ "$P
     exit $SUCCESS
 fi
 
-# Build the comment we'll post to the PR.
-OUTPUT=$(stripcolors "$OUTPUT")
-COMMENT=""
-if [ $SUCCESS -ne 0 ]; then
-    OUTPUT=$(wrap "$OUTPUT")
-    COMMENT="#### \`terraform apply\` Failed
+if [[ "$GITHUB_EVENT_NAME" == 'pull_request' ]]; then
+    # Build the comment we'll post to the PR.
+    OUTPUT=$(stripcolors "$OUTPUT")
+    COMMENT=""
+    if [ $SUCCESS -ne 0 ]; then
+        OUTPUT=$(wrap "$OUTPUT")
+        COMMENT="#### \`terraform apply\` Failed
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
-else
-    # Call wrap to optionally wrap our output in a collapsible markdown section.
-    OUTPUT=$(wrap "$OUTPUT")
-    COMMENT="#### \`terraform apply\` Success
+    else
+        # Call wrap to optionally wrap our output in a collapsible markdown section.
+        OUTPUT=$(wrap "$OUTPUT")
+        COMMENT="#### \`terraform apply\` Success
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
+    fi
+
+    # Post the comment.
+    PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
+    COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
+
+    curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 fi
-
-# Post the comment.
-PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
-curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
 
 exit $SUCCESS
