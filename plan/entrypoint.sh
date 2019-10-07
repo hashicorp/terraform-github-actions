@@ -44,10 +44,21 @@ if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]
 fi
 
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -input=false $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -detailed-exitcode -input=false $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
+
+# Detailed exit codes of the plan command include:
+# - 0 = Succeeded with empty diff (no changes)
+# - 1 = Error
+# - 2 = Succeeded with non-empty diff (changes present)
+CHANGES_PRESENT=false
+if [ $SUCCESS -eq 2 ]; then
+    CHANGES_PRESENT=true
+    SUCCESS=0
+fi
+echo ::set-output name=changes-present::$CHANGES_PRESENT
 
 if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
