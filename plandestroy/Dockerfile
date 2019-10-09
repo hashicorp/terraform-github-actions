@@ -1,7 +1,7 @@
 FROM hashicorp/terraform:0.12.10
 
-LABEL "com.github.actions.name"="terraform plandestroy"
-LABEL "com.github.actions.description"="Run terraform plandestroy"
+LABEL "com.github.actions.name"="terraform plan -destroy"
+LABEL "com.github.actions.description"="Run terraform plan -destroy"
 LABEL "com.github.actions.icon"="book-open"
 LABEL "com.github.actions.color"="purple"
 

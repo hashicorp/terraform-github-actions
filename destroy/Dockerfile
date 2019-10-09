@@ -1,7 +1,7 @@
 FROM hashicorp/terraform:0.12.10
 
 LABEL "com.github.actions.name"="terraform destroy"
-LABEL "com.github.actions.description"="Run Terraform Destroy"
+LABEL "com.github.actions.description"="Run Terraform destroy"
 LABEL "com.github.actions.icon"="play-circle"
 LABEL "com.github.actions.color"="purple"
 
