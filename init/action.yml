@@ -1,0 +1,9 @@
+name: 'Terraform Init'
+description: 'Runs `terraform init` to initialize a Terraform working directory. This action will comment back on the pull request on failure.'
+author: 'HashiCorp Terraform Team <terraform@hashicorp.com>'
+branding:
+  icon: 'download'  
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

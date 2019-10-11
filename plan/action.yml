@@ -1,0 +1,9 @@
+name: 'Terraform Plan'
+description: 'Runs terraform plan and comments back on the pull request with the plan output.'
+author: 'HashiCorp Terraform Team <terraform@hashicorp.com>'
+branding:
+  icon: 'book-open'  
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

@@ -1,0 +1,9 @@
+name: 'Terraform Apply'
+description: 'Runs `terraform apply` and comments back on the pull request with the apply output.'
+author: 'HashiCorp Terraform Team <terraform@hashicorp.com>'
+branding:
+  icon: 'play-circle'  
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

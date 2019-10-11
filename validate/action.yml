@@ -1,0 +1,9 @@
+name: 'Terraform Validate'
+description: 'Runs terraform validate to validate the Terraform files in a directory comments back on error.'
+author: 'HashiCorp Terraform Team <terraform@hashicorp.com>'
+branding:
+  icon: 'alert-triangle'  
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
