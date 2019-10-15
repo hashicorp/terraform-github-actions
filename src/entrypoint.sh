@@ -2,30 +2,30 @@
 
 scriptDir=$(dirname ${0})
 
-source ${scriptDir}/tf_fmt.sh
+source ${scriptDir}/terraform_fmt.sh
 
 function parseInputs {
  
   # Required inputs
-  if [ "${INPUT_TERRAFORM_VERSION}" != "" ]; then
-    tfVersion=${INPUT_TERRAFORM_VERSION}
+  if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
+    tfVersion=${INPUT_TF_ACTIONS_VERSION}
   else
     echo "Input terraform_version cannot be empty"
     exit 1
   fi
 
-  if [ "${INPUT_TERRAFORM_SUBCOMMAND}" != "" ]; then
-    tfSubcommand=${INPUT_TERRAFORM_SUBCOMMAND}
+  if [ "${INPUT_TF_ACTIONS_SUBCOMMAND}" != "" ]; then
+    tfSubcommand=${INPUT_TF_ACTIONS_SUBCOMMAND}
   else
     echo "Input terraform_subcommand cannot be empty"
     exit 1
   fi
  
   # Optional inputs
-  if [ "${INPUT_TERRAFORM_WORKING_DIR}" == "" ] || [ "${INPUT_TERRAFORM_WORKING_DIR}" == "." ]; then
+  if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" == "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" == "." ]; then
     tfWorkingDir=${GITHUB_WORKSPACE}
   else
-    tfWorkingDir=${GITHUB_WORKSPACE}/${INPUT_TERRAFORM_WORKING_DIR}
+    tfWorkingDir=${GITHUB_WORKSPACE}/${INPUT_TF_ACTIONS_WORKING_DIR}
   fi
 }
 
@@ -51,6 +51,7 @@ function installTerraform {
 }
 
 parseInputs
+cd ${tfWorkingDir}
 
 case "${tfSubcommand}" in
   fmt)
