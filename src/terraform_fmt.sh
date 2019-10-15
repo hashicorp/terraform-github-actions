@@ -8,6 +8,8 @@ function terraformFmt {
   # Exit code of 0 indicates all files are formatted correctly.
   if [ ${fmtExitCode} -eq 0 ]; then
     echo "fmt: Terraform files in ${tfWorkingDir} are correctly formatted"
+    echo "${fmtOutput}"
+    echo
     exit ${fmtExitCode}
   # Exit code of 2 indicates a parse error. Print the output and exit 2.
   elif [ ${fmtExitCode} -eq 2 ]; then
