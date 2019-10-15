@@ -3,6 +3,7 @@
 scriptDir=$(dirname ${0})
 
 source ${scriptDir}/terraform_fmt.sh
+source ${scriptDir}/terraform_init.sh
 
 function parseInputs {
  
@@ -57,6 +58,10 @@ case "${tfSubcommand}" in
   fmt)
     installTerraform
     terraformFmt
+    ;;
+  init)
+    installTerraform
+    terraformInit
     ;;
   *)
     echo "Error: Must provide a valid value for terraform_subcommand"
