@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.12.10
+FROM hashicorp/terraform:0.12.11
 
 LABEL "com.github.actions.name"="terraform fmt"
 LABEL "com.github.actions.description"="Validate terraform files are formatted"
