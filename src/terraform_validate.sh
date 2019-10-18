@@ -5,7 +5,7 @@ function terraformValidate {
   echo "validate: info: validating Terraform configuration in ${tfWorkingDir}"
   validateOutput=$(terraform validate 2>&1)
   validateExitCode=${?}
-  
+
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${validateExitCode} -eq 0 ]; then
     echo "validate: info: successfully validated Terraform configuration in ${tfWorkingDir}"
@@ -31,10 +31,10 @@ ${validateOutput}
 
     validateCommentWrapper=$(stripColors "${validateCommentWrapper}")
     echo "validate: info: creating JSON"
-    validatePayload=$(echo '{}' | jq --arg body "${validateCommentWrapper}" '.body = $body')
+    validatePayload=$(echo "${validateCommentWrapper}" | jq -R --slurp '{body: .}')
     validateCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "validate: info: commenting on the pull request"
-    curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${validatePayload}" "${validateCommentsURL}" > /dev/null
+    echo "${validatePayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${validateCommentsURL}" > /dev/null
   fi
 
   exit ${validateExitCode}
