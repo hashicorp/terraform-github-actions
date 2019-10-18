@@ -2,7 +2,7 @@
 
 function terraformFmt {
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
-  fmtOutput=$(terraform fmt -check -write=false -diff -recursive)
+  fmtOutput=$(terraform fmt -check -write=false -diff -recursive 2>&1)
   fmtExitCode=${?}
   
   # Exit code of 0 indicates all files are formatted correctly.
@@ -22,7 +22,7 @@ function terraformFmt {
     echo "${fmtOutput}"
     echo
     echo "fmt: error: the following files in ${tfWorkingDir} are incorrectly formatted"
-    fmtFileList=$(terraform fmt -check -write=false -list -recursive)
+    fmtFileList=$(terraform fmt -check -write=false -list -recursive 2>&1)
     echo "${fmtFileList}"
     echo
 

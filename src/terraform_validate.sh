@@ -2,7 +2,7 @@
 
 function terraformValidate {
   echo "validate: validating Terraform configuration in ${tfWorkingDir}"
-  validateOutput=$(terraform validate)
+  validateOutput=$(terraform validate 2>&1)
   validateExitCode=${?}
   
   # Exit code of 0 indicates success.
