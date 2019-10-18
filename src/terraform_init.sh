@@ -2,7 +2,7 @@
 
 function terraformInit {
   echo "init: info: initializing Terraform configuration in ${tfWorkingDir}"
-  initOutput=$(terraform init -input=false)
+  initOutput=$(terraform init -input=false 2>&1)
   initExitCode=${?}
   
   # Exit code of 0 indicates success.
