@@ -24,10 +24,14 @@ function parseInputs {
   fi
  
   # Optional inputs
-  if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" == "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" == "." ]; then
-    tfWorkingDir=${GITHUB_WORKSPACE}
-  else
-    tfWorkingDir=${GITHUB_WORKSPACE}/${INPUT_TF_ACTIONS_WORKING_DIR}
+  tfWorkingDir=""
+  if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "." ]; then
+    tfWorkingDir=${INPUT_TF_ACTIONS_WORKING_DIR}
+  fi
+ 
+  tfComment=0
+  if [ "${INPUT_TF_ACTIONS_COMMENT}" == "1" ] || [ "${INPUT_TF_ACTIONS_COMMENT}" == "true" ]; then
+    tfComment=1
   fi
 }
 
@@ -44,7 +48,8 @@ function installTerraform {
   echo "Successfully downloaded Terraform v${tfVersion}"
 
   echo "Unzipping Terraform v${tfVersion}"
-  unzip -d /usr/local/bin /tmp/terraform_${tfVersion} > /dev/null 2>&1
+  # unzip -d /usr/local/bin /tmp/terraform_${tfVersion} > /dev/null 2>&1
+  unzip -d /usr/local/bin /tmp/terraform_${tfVersion} &> /dev/null
   if [ "${?}" -ne 0 ]; then
     echo "Failed to unzip Terraform v${tfVersion}"
     exit 1
@@ -53,7 +58,7 @@ function installTerraform {
 }
 
 parseInputs
-cd ${tfWorkingDir}
+cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
 
 case "${tfSubcommand}" in
   fmt)
