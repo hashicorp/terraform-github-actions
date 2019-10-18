@@ -16,15 +16,38 @@ function terraformFmt {
     echo "${fmtOutput}"
     echo
     exit ${fmtExitCode}
-  # Otherwise, gather a list of incorrectly formatted files and output them.
+  # Otherwise, output the incorrectly formatted files and comment if necessary.
   else
-    echo "fmt: terraform files in ${tfWorkingDir} are incorrectly formatted"
+    echo "fmt: Terraform files in ${tfWorkingDir} are incorrectly formatted"
     echo "${fmtOutput}"
     echo
-    echo "fmt: the following files in ${tfWorkingDir} are incorrectly formatted"
+    # echo "fmt: the following files in ${tfWorkingDir} are incorrectly formatted"
     fmtFileList=$(terraform fmt -check -write=false -list -recursive)
-    echo "${fmtFileList}"
-    echo
+    # echo "${fmtFileList}"
+    # echo
+
+    # Comment
+    if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+      fmtComment=""
+      for file in ${fmtFileList}; do
+        fmtFileDiff=$(terraform fmt -check -write=false -diff "$file"  | sed -n '/@@.*/,//{/@@.*/d;p}')
+        fmtComment="${fmtComment}
+<details><summary><code>${tfWorkingDir}/${file}</code></summary>
+
+\`\`\`diff
+${fmtFileDiff}
+\`\`\`
+</details>
+"
+      done
+      fmtCommentWrapper="#### \`terraform fmt\` Failed
+${fmtComment}
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`*
+"
+      fmtPayload=$(echo '{}' | jq --arg body "${fmtCommentWrapper}" '.body = $body')
+      fmtCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
+      curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${fmtPayload}" "${fmtCommentsURL}" > /dev/null
+    fi
     exit ${fmtExitCode}
   fi
 }
