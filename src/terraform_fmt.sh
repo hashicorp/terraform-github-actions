@@ -1,13 +1,13 @@
 #!/bin/bash
 
 function terraformFmt {
-  echo "fmt: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
+  echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
   fmtOutput=$(terraform fmt -check -write=false -diff -recursive)
   fmtExitCode=${?}
   
   # Exit code of 0 indicates all files are formatted correctly.
   if [ ${fmtExitCode} -eq 0 ]; then
-    echo "fmt: Terraform files in ${tfWorkingDir} are correctly formatted"
+    echo "fmt: info: Terraform files in ${tfWorkingDir} are correctly formatted"
     echo "${fmtOutput}"
     echo
     exit ${fmtExitCode}
@@ -18,15 +18,15 @@ function terraformFmt {
     exit ${fmtExitCode}
   # Otherwise, output the incorrectly formatted files and comment if necessary.
   else
-    echo "fmt: Terraform files in ${tfWorkingDir} are incorrectly formatted"
+    echo "fmt: error: Terraform files in ${tfWorkingDir} are incorrectly formatted"
     echo "${fmtOutput}"
     echo
-    # echo "fmt: the following files in ${tfWorkingDir} are incorrectly formatted"
+    echo "fmt: error: the following files in ${tfWorkingDir} are incorrectly formatted"
     fmtFileList=$(terraform fmt -check -write=false -list -recursive)
-    # echo "${fmtFileList}"
-    # echo
+    echo "${fmtFileList}"
+    echo
 
-    # Comment
+    # Comment on the pull request
     if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
       fmtComment=""
       for file in ${fmtFileList}; do
@@ -44,8 +44,10 @@ ${fmtFileDiff}
 ${fmtComment}
 *Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`*
 "
+      echo "fmt: info: creating JSON"
       fmtPayload=$(echo '{}' | jq --arg body "${fmtCommentWrapper}" '.body = $body')
       fmtCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
+      echo "fmt: info: commenting on the pull request"
       curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${fmtPayload}" "${fmtCommentsURL}" > /dev/null
     fi
     exit ${fmtExitCode}
