@@ -40,7 +40,7 @@ EOF
 fi
 
 if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]]; then
-  terraform workspace select "$TF_ACTION_WORKSPACE"
+  terraform workspace select "$TF_ACTION_WORKSPACE" || ("$TF_WORKSPACE_FORCE_CREATE" && terraform workspace new "$TF_ACTION_WORKSPACE")
 fi
 
 set +e
