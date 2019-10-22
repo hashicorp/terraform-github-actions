@@ -1,11 +1,5 @@
 #!/bin/bash
 
-  # -detailed-exitcode  Return detailed exit codes when the command exits. This
-  #                     will change the meaning of exit codes to:
-  #                     0 - Succeeded, diff is empty (no changes)
-  #                     1 - Errored
-  #                     2 - Succeeded, there is a diff
-
 function terraformPlan {
   # Gather the output of `terraform plan`.
   echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
@@ -31,7 +25,7 @@ function terraformPlan {
     echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
     echo "${planOutput}"
     echo
-    if echo "${planOutput}" | egrep '^-{72}$'; then
+    if echo "${planOutput}" | egrep '^-{72}$' &> /dev/null; then
         planOutput=$(echo "${planOutput}" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
     fi
     planOutput=$(echo "${planOutput}" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
