@@ -6,4 +6,4 @@ RUN ["bin/sh", "-c", "mkdir -p /src"]
 
 COPY ["src", "/src/"]
 
-ENTRYPOINT ["/src/entrypoint.sh"]
+ENTRYPOINT ["/src/main.sh"]
