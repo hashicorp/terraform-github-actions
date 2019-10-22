@@ -29,6 +29,9 @@ function terraformPlan {
         planOutput=$(echo "${planOutput}" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
     fi
     planOutput=$(echo "${planOutput}" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
+
+     # If output is longer than max length (65536 characters), keep last part
+    planOutput=$(echo "${planOutput}" | tail -c 65000 )
   fi
 
   # Exit code of !0 indicates failure.
