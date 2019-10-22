@@ -1,13 +1,10 @@
 #!/bin/bash
 
-scriptDir=$(dirname ${0})
-
-source ${scriptDir}/terraform_fmt.sh
-source ${scriptDir}/terraform_init.sh
-source ${scriptDir}/terraform_validate.sh
+function stripColors {
+  echo "${1}" | sed 's/\x1b\[[0-9;]*m//g'
+}
 
 function parseInputs {
- 
   # Required inputs
   if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
     tfVersion=${INPUT_TF_ACTIONS_VERSION}
@@ -35,7 +32,6 @@ function parseInputs {
   fi
 }
 
-
 function installTerraform {
   url="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
 
@@ -57,23 +53,33 @@ function installTerraform {
   echo "Successfully unzipped Terraform v${tfVersion}"
 }
 
-parseInputs
-cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
+function main {
+  # Source the other files to gain access to their functions
+  scriptDir=$(dirname ${0})
+  source ${scriptDir}/terraform_fmt.sh
+  source ${scriptDir}/terraform_init.sh
+  source ${scriptDir}/terraform_validate.sh
 
-case "${tfSubcommand}" in
-  fmt)
-    installTerraform
-    terraformFmt
-    ;;
-  init)
-    installTerraform
-    terraformInit
-    ;;
-  validate)
-    installTerraform
-    terraformValidate
-    ;;
-  *)
-    echo "Error: Must provide a valid value for terraform_subcommand"
-    ;;
-esac
+  parseInputs
+  cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
+
+  case "${tfSubcommand}" in
+    fmt)
+      installTerraform
+      terraformFmt
+      ;;
+    init)
+      installTerraform
+      terraformInit
+      ;;
+    validate)
+      installTerraform
+      terraformValidate
+      ;;
+    *)
+      echo "Error: Must provide a valid value for terraform_subcommand"
+      ;;
+  esac
+}
+
+main
