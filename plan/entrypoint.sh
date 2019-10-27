@@ -94,7 +94,7 @@ $OUTPUT
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 fi
 
-if [[ "$GITHUB_EVENT_NAME" == 'pull_request' ]]; then
+if [[ "$GITHUB_EVENT_NAME" == 'pull_request' && ( "$CHANGES_PRESENT" = true && "$TF_SKIP_COMMENT_IF_NO_CHANGES" = false )]]; then
     # Post the comment.
     PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
