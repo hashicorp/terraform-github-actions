@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# stripcolors takes some output and removes ANSI color codes.
+stripcolors() {
+  echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
 # wrap takes some output and wraps it in a collapsible markdown section if
 # it's over $TF_ACTION_WRAP_LINES long.
 wrap() {
@@ -39,16 +44,28 @@ if [[ ! -z "$TF_ACTION_WORKSPACE" ]] && [[ "$TF_ACTION_WORKSPACE" != "default" ]
 fi
 
 set +e
-OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -no-color -input=false $*" 2>&1)
+OUTPUT=$(sh -c "TF_IN_AUTOMATION=true terraform plan -detailed-exitcode -input=false $*" 2>&1)
 SUCCESS=$?
 echo "$OUTPUT"
 set -e
+
+# Detailed exit codes of the plan command include:
+# - 0 = Succeeded with empty diff (no changes)
+# - 1 = Error
+# - 2 = Succeeded with non-empty diff (changes present)
+CHANGES_PRESENT=false
+if [ $SUCCESS -eq 2 ]; then
+    CHANGES_PRESENT=true
+    SUCCESS=0
+fi
+echo ::set-output name=changes-present::$CHANGES_PRESENT
 
 if [ "$TF_ACTION_COMMENT" = "1" ] || [ "$TF_ACTION_COMMENT" = "false" ]; then
     exit $SUCCESS
 fi
 
 # Build the comment we'll post to the PR.
+OUTPUT=$(stripcolors "$OUTPUT")
 COMMENT=""
 if [ $SUCCESS -ne 0 ]; then
     OUTPUT=$(wrap "$OUTPUT")
@@ -77,9 +94,11 @@ $OUTPUT
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
 fi
 
-# Post the comment.
-PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
-curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
+if [[ "$GITHUB_EVENT_NAME" == 'pull_request' ]]; then
+    # Post the comment.
+    PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
+    COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
+    curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
+fi
 
 exit $SUCCESS
