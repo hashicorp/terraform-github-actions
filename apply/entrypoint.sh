@@ -62,14 +62,14 @@ if [[ "$GITHUB_EVENT_NAME" == 'pull_request' ]]; then
     COMMENT=""
     if [ $SUCCESS -ne 0 ]; then
         OUTPUT=$(wrap "$OUTPUT")
-        COMMENT="#### \`terraform apply\` Failed
+        COMMENT="#### \`terraform apply\` Failed for \`$TF_ACTION_WORKING_DIRECTORY\`
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"
     else
         # Call wrap to optionally wrap our output in a collapsible markdown section.
         OUTPUT=$(wrap "$OUTPUT")
-        COMMENT="#### \`terraform apply\` Success
+        COMMENT="#### \`terraform apply\` Success for \`$TF_ACTION_WORKING_DIRECTORY\`
 $OUTPUT
 
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*"

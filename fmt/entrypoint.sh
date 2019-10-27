@@ -50,7 +50,7 @@ $FILE_DIFF
         done
     fi
 
-    COMMENT_WRAPPER="#### \`terraform fmt\` Failed
+    COMMENT_WRAPPER="#### \`terraform fmt\` Failed for \`$TF_ACTION_WORKING_DIRECTORY\`
 $COMMENT
 *Workflow: \`$GITHUB_WORKFLOW\`, Action: \`$GITHUB_ACTION\`*
 "

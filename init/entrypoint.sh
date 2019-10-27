@@ -33,7 +33,7 @@ if [[ "$GITHUB_EVENT_NAME" == 'pull_request' ]]; then
     fi
 
     OUTPUT=$(stripcolors "$OUTPUT")
-    COMMENT="#### \`terraform init\` Failed
+    COMMENT="#### \`terraform init\` Failed for \`$TF_ACTION_WORKING_DIRECTORY\`
 \`\`\`
 $OUTPUT
 \`\`\`
