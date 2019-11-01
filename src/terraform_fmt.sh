@@ -41,7 +41,7 @@ function terraformFmt {
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
     fmtComment=""
     for file in ${fmtFileList}; do
-      fmtFileDiff=$(terraform fmt -check=true -write=false -diff "$file"  | sed -n '/@@.*/,//{/@@.*/d;p}')
+      fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
       fmtComment="${fmtComment}
 <details><summary><code>${tfWorkingDir}/${file}</code></summary>
 
