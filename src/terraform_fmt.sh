@@ -43,13 +43,14 @@ function terraformFmt {
 ${fmtFileDiff}
 \`\`\`
 
-</details>
-"
+</details>"
+
     done
+
     fmtCommentWrapper="#### \`terraform fmt\` Failed
 ${fmtComment}
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`*
-"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
+
     fmtCommentWrapper=$(stripColors "${fmtCommentWrapper}")
     echo "fmt: info: creating JSON"
     fmtPayload=$(echo '{}' | jq --arg body "${fmtCommentWrapper}" '.body = $body')

@@ -27,7 +27,7 @@ function terraformInit {
 ${initOutput}
 \`\`\`
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`*"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
 
     initCommentWrapper=$(stripColors "${initCommentWrapper}")
     echo "init: info: creating JSON"

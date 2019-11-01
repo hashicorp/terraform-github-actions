@@ -13,7 +13,7 @@ inputs:
     default: ''
   tf_actions_comment:
     description: 'Whether or not to comment on pull requests.'
-    default: false
+    default: true
 outputs:
   tf_actions_plan_has_changes:
     description: 'Whether or not the Terraform plan contained changes.'
