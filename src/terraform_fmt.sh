@@ -33,7 +33,7 @@ function terraformFmt {
   echo "${fmtOutput}"
   echo
   echo "fmt: error: the following files in ${tfWorkingDir} are incorrectly formatted"
-  fmtFileList=$(terraform fmt -check=true -write=false -list ${fmtRecursive} 2>&1)
+  fmtFileList=$(terraform fmt -check=true -write=false -list ${fmtRecursive})
   echo "${fmtFileList}"
   echo
 
