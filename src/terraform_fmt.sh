@@ -9,7 +9,7 @@ function terraformFmt {
 
   # Gather the output of `terraform fmt`.
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
-  fmtOutput=$(terraform fmt -check -write=false -diff ${fmtRecursive} 2>&1)
+  fmtOutput=$(terraform fmt -check=true -write=false -diff ${fmtRecursive} 2>&1)
   fmtExitCode=${?}
   
   # Exit code of 0 indicates success. Print the output and exit.
@@ -33,7 +33,7 @@ function terraformFmt {
   echo "${fmtOutput}"
   echo
   echo "fmt: error: the following files in ${tfWorkingDir} are incorrectly formatted"
-  fmtFileList=$(terraform fmt -check -write=false -list -recursive 2>&1)
+  fmtFileList=$(terraform fmt -check=true -write=false -list ${fmtRecursive})
   echo "${fmtFileList}"
   echo
 
@@ -41,7 +41,7 @@ function terraformFmt {
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
     fmtComment=""
     for file in ${fmtFileList}; do
-      fmtFileDiff=$(terraform fmt -check -write=false -diff "$file"  | sed -n '/@@.*/,//{/@@.*/d;p}')
+      fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
       fmtComment="${fmtComment}
 <details><summary><code>${tfWorkingDir}/${file}</code></summary>
 
