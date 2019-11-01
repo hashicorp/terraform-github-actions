@@ -59,6 +59,7 @@ function main {
   source ${scriptDir}/terraform_init.sh
   source ${scriptDir}/terraform_validate.sh
   source ${scriptDir}/terraform_plan.sh
+  source ${scriptDir}/terraform_apply.sh
 
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
@@ -79,6 +80,10 @@ function main {
     plan)
       installTerraform
       terraformPlan
+      ;;
+    apply)
+      installTerraform
+      terraformApply
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
