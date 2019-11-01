@@ -4,6 +4,17 @@ function stripColors {
   echo "${1}" | sed 's/\x1b\[[0-9;]*m//g'
 }
 
+function hasPrefix {
+  case ${2} in
+    "${1}"*)
+      true
+      ;;
+    *)
+      false
+      ;;
+  esac
+}
+
 function parseInputs {
   # Required inputs
   if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then

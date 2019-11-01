@@ -1,9 +1,15 @@
 #!/bin/bash
 
 function terraformFmt {
+  # Eliminate `-recursive` option for Terraform 0.11.x.
+  fmtRecursive="-recursive"
+  if hasPrefix "0.11" "${tfVersion}"; then
+    fmtRecursive=""
+  fi
+
   # Gather the output of `terraform fmt`.
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
-  fmtOutput=$(terraform fmt -check -write=false -diff -recursive 2>&1)
+  fmtOutput=$(terraform fmt -check -write=false -diff ${fmtRecursive} 2>&1)
   fmtExitCode=${?}
   
   # Exit code of 0 indicates success. Print the output and exit.
