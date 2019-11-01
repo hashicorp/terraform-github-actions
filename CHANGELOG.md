@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.2
+
+### Fixed
+
+* Fixed an error with `terraform fmt` processing STDERR output when `TF_LOG` was set.
+
 ## v0.5.1
 
 ### Fixed
