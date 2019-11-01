@@ -39,6 +39,5 @@ ${applyOutput}
     curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${applyPayload}" "${applyCommentsURL}" > /dev/null
   fi
 
-  echo ::set-output name=tf_actions_apply_has_changes::${applyHasChanges}
   exit ${applyExitCode}
 }
