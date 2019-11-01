@@ -27,7 +27,7 @@ function terraformValidate {
 ${validateOutput}
 \`\`\`
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`*"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
 
     validateCommentWrapper=$(stripColors "${validateCommentWrapper}")
     echo "validate: info: creating JSON"
