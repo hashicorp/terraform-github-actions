@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.3
+
+### Fixed
+
+* Fixed improper comment formatting on `fmt`, `plan`, and `apply`.
+
 ## v0.5.2
 
 ### Fixed
