@@ -48,6 +48,7 @@ ${planOutput}
 \`\`\`
 
 </details>
+
 *Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
 
     planCommentWrapper=$(stripColors "${planCommentWrapper}")
