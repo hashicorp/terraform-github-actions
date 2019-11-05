@@ -1,0 +1,54 @@
+# An example workflow using the `remote` backend with `prefix`.
+name: 'Terraform Workflow'
+on:
+  - pull_request
+jobs:
+  remote:
+    name: 'Terraform Actions'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+      - name: 'Terraform Format'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.13
+          tf_actions_subcommand: 'fmt'
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.13
+          tf_actions_subcommand: 'init'
+          tf_actions_comment: true
+        env:
+          # TF_CLI_ARGS_init is used to pass the backend configuration to the run.
+          # This way is chosen to replicate how one would use the `remote` backend with Terraform Cloud/Enterprise via automation.
+          TF_CLI_ARGS_init: '-backend-config="token=${{ secrets.TFP_TOKEN }}" -backend-config="organization=CHANGE_ME"'
+          # TF_WORKSPACE is needed to automatically select the workspace.
+          # This is concatenated to the end of the `prefix` defined within the `remote` backend.
+          # This workspace must already exist in Terraform Cloud/Enterprise.
+          TF_WORKSPACE: testing
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.13
+          tf_actions_subcommand: 'validate'
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Terraform Plan'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.13
+          tf_actions_subcommand: 'plan'
+          tf_actions_comment: true
+        env:
+          # TF_WORKSPACE is needed to automatically select the workspace.
+          # This is concatenated to the end of the `prefix` defined within the `remote` backend.
+          # This workspace must already exist in Terraform Cloud/Enterprise.
+          TF_WORKSPACE: testing
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
