@@ -5,19 +5,21 @@ function terraformApply {
   echo "apply: info: applying Terraform configuration in ${tfWorkingDir}"
   applyOutput=$(terraform apply -auto-approve -input=false 2>&1)
   applyExitCode=${?}
+  applyCommentStatus="Failed"
 
+  # Exit code of 0 indicates success. Print the output and exit.
   if [ ${applyExitCode} -eq 0 ]; then
-    # Exit code of 0 indicates success.
     echo "apply: info: successfully applied Terraform configuration in ${tfWorkingDir}"
     echo "${applyOutput}"
     echo
     applyCommentStatus="Success"
-  else
-    # Exit code of !0 indicates failure.
+  fi
+  
+  # Exit code of !0 indicates failure.
+  if [ ${applyExitCode} -ne 0 ]; then
     echo "apply: error: failed to apply Terraform configuration in ${tfWorkingDir}"
     echo "${applyOutput}"
     echo
-    applyCommentStatus="Failed"
   fi
 
   # Comment on the pull request if necessary.
