@@ -14,7 +14,7 @@ function terraformApply {
     echo
     applyCommentStatus="Success"
   fi
-  
+
   # Exit code of !0 indicates failure.
   if [ ${applyExitCode} -ne 0 ]; then
     echo "apply: error: failed to apply Terraform configuration in ${tfWorkingDir}"
