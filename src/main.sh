@@ -75,26 +75,30 @@ function main {
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
 
-  case "${tfSubcommand}" in
+  cmdargs=(${tfSubcommand})
+  cmd=${cmdargs[0]}
+  args=${cmdargs[@]:1}
+
+  case "${cmd}" in
     fmt)
       installTerraform
-      terraformFmt
+      terraformFmt $args
       ;;
     init)
       installTerraform
-      terraformInit
+      terraformInit $args
       ;;
     validate)
       installTerraform
-      terraformValidate
+      terraformValidate $args
       ;;
     plan)
       installTerraform
-      terraformPlan
+      terraformPlan $args
       ;;
     apply)
       installTerraform
-      terraformApply
+      terraformApply $args
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
