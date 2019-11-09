@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.0
+
+### Added
+
+* Allow passing arguments using GitHub Actions `args` attribute. ([#105](https://github.com/hashicorp/terraform-github-actions/issues/105))
+
+### Changed
+
+* Updated examples to reflect new additions.
+
 ## v0.5.4
 
 ### Changed
