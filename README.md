@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the examples within the `examples` directory for more complex usage examples.
+This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the examples within the `examples` directory for more examples of common workflows.
 
 ## Inputs
 
@@ -98,4 +98,4 @@ The usual [Terraform environment variables](https://www.terraform.io/docs/comman
 * [`TF_CLI_ARGS_name`](https://www.terraform.io/docs/commands/environment-variables.html#tf_cli_args-and-tf_cli_args_name)
 * `TF_WORKSPACE`
 
-Other environment variables may be configured to pass data into Terraform backends and providers. If the data is sensitive, consider using [secrets](#secrets) instead.
+Other environment variables may be configured to pass data into Terraform. If the data is sensitive, consider using [secrets](#secrets) instead.
