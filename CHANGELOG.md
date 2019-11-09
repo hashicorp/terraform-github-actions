@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5.4
+
+### Changed
+
+* Always post a comment on a pull request regardless of exit code when using `apply`. ([#97](https://github.com/hashicorp/terraform-github-actions/issues/97))
+* Pass comment content to `jq` using pipes instead of arguments.
+
 ## v0.5.3
 
 ### Fixed
