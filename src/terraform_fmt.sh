@@ -9,7 +9,7 @@ function terraformFmt {
 
   # Gather the output of `terraform fmt`.
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
-  fmtOutput=$(terraform fmt -check=true -write=false -diff ${fmtRecursive} "${*}" 2>&1)
+  fmtOutput=$(terraform fmt -check=true -write=false -diff ${fmtRecursive} ${*} 2>&1)
   fmtExitCode=${?}
 
   # Exit code of 0 indicates success. Print the output and exit.

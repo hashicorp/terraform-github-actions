@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.1
+
+### Fixed
+
+* Fixed improper handling of `args` in each `terraform` command when `args` contained no value. ([#109](https://github.com/hashicorp/terraform-github-actions/issues/109)) ([#110](https://github.com/hashicorp/terraform-github-actions/issues/110))
+
 ## v0.6.0
 
 ### Added

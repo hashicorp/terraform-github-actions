@@ -30,13 +30,13 @@ function parseInputs {
     echo "Input terraform_subcommand cannot be empty"
     exit 1
   fi
- 
+
   # Optional inputs
   tfWorkingDir="."
   if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "." ]; then
     tfWorkingDir=${INPUT_TF_ACTIONS_WORKING_DIR}
   fi
- 
+
   tfComment=0
   if [ "${INPUT_TF_ACTIONS_COMMENT}" == "1" ] || [ "${INPUT_TF_ACTIONS_COMMENT}" == "true" ]; then
     tfComment=1
@@ -71,6 +71,7 @@ function main {
   source ${scriptDir}/terraform_validate.sh
   source ${scriptDir}/terraform_plan.sh
   source ${scriptDir}/terraform_apply.sh
+  source ${scriptDir}/terraform_output.sh
 
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
@@ -95,6 +96,10 @@ function main {
     apply)
       installTerraform
       terraformApply "${*}"
+      ;;
+    output)
+      installTerraform
+      terraformOutput ${*}
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
