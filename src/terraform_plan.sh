@@ -29,6 +29,9 @@ function terraformPlan {
         planOutput=$(echo "${planOutput}" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
     fi
     planOutput=$(echo "${planOutput}" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
+
+     # If output is longer than max length (65536 characters), keep last part
+    planOutput=$(echo "${planOutput}" | tail -c 65000 )
   fi
 
   # Exit code of !0 indicates failure.
@@ -40,7 +43,7 @@ function terraformPlan {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ] && ([ "${planHasChanges}" == "true" ] || [ "${planCommentStatus}" == "Failed" ]); then
-    planCommentWrapper="#### \`terraform plan\` ${planCommentStatus} 
+    planCommentWrapper="#### \`terraform plan\` ${planCommentStatus}
 <details><summary>Show Output</summary>
 
 \`\`\`
@@ -53,10 +56,10 @@ ${planOutput}
 
     planCommentWrapper=$(stripColors "${planCommentWrapper}")
     echo "plan: info: creating JSON"
-    planPayload=$(echo '{}' | jq --arg body "${planCommentWrapper}" '.body = $body')
+    planPayload=$(echo "${planCommentWrapper}" | jq -R --slurp '{body: .}')
     planCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "plan: info: commenting on the pull request"
-    curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${planPayload}" "${planCommentsURL}" > /dev/null
+    echo "${planPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${planCommentsURL}" > /dev/null
   fi
 
   echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}

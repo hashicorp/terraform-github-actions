@@ -5,7 +5,7 @@ function terraformInit {
   echo "init: info: initializing Terraform configuration in ${tfWorkingDir}"
   initOutput=$(terraform init -input=false 2>&1)
   initExitCode=${?}
-  
+
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${initExitCode} -eq 0 ]; then
     echo "init: info: successfully initialized Terraform configuration in ${tfWorkingDir}"
@@ -31,10 +31,10 @@ ${initOutput}
 
     initCommentWrapper=$(stripColors "${initCommentWrapper}")
     echo "init: info: creating JSON"
-    initPayload=$(echo '{}' | jq --arg body "${initCommentWrapper}" '.body = $body')
+    initPayload=$(echo "${initCommentWrapper}" | jq -R --slurp '{body: .}')
     initCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "init: info: commenting on the pull request"
-    curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${initPayload}" "${initCommentsURL}" > /dev/null
+    echo "${initPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${initCommentsURL}" > /dev/null
   fi
 
   exit ${initExitCode}

@@ -11,7 +11,7 @@ function terraformFmt {
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
   fmtOutput=$(terraform fmt -check=true -write=false -diff ${fmtRecursive} 2>&1)
   fmtExitCode=${?}
-  
+
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${fmtExitCode} -eq 0 ]; then
     echo "fmt: info: Terraform files in ${tfWorkingDir} are correctly formatted"
@@ -60,10 +60,10 @@ ${fmtComment}
 
     fmtCommentWrapper=$(stripColors "${fmtCommentWrapper}")
     echo "fmt: info: creating JSON"
-    fmtPayload=$(echo '{}' | jq --arg body "${fmtCommentWrapper}" '.body = $body')
+    fmtPayload=$(echo "${fmtCommentWrapper}" | jq -R --slurp '{body: .}')
     fmtCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "fmt: info: commenting on the pull request"
-    curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data "${fmtPayload}" "${fmtCommentsURL}" > /dev/null
+    echo "${fmtPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${fmtCommentsURL}" > /dev/null
   fi
 
   exit ${fmtExitCode}
