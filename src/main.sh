@@ -61,6 +61,15 @@ function installTerraform {
     exit 1
   fi
   echo "Successfully unzipped Terraform v${tfVersion}"
+
+  if [ -n "$TF_ACTION_TFE_TOKEN" ]; then
+    echo "setting up terraform credentials"
+    cat << EOF > ~/.terraformrc
+      credentials "app.terraform.io" {
+        token = "$TF_ACTION_TFE_TOKEN"
+      }        
+EOF
+  fi
 }
 
 function main {
