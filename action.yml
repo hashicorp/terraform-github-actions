@@ -18,7 +18,7 @@ inputs:
     description: 'Whether or not to comment on pull requests.'
     default: true
   tf_action_tfe_token:
-    description: 'If you're using app.terraform.io as your remote backing store, your token'
+    description: 'If you are using app.terraform.io as your remote backing store, your token'
     required: false
 outputs:
   tf_actions_plan_has_changes:
