@@ -79,23 +79,23 @@ function main {
   case "${tfSubcommand}" in
     fmt)
       installTerraform
-      terraformFmt "${*}"
+      terraformFmt ${*}
       ;;
     init)
       installTerraform
-      terraformInit "${*}"
+      terraformInit ${*}
       ;;
     validate)
       installTerraform
-      terraformValidate "${*}"
+      terraformValidate ${*}
       ;;
     plan)
       installTerraform
-      terraformPlan "${*}"
+      terraformPlan ${*}
       ;;
     apply)
       installTerraform
-      terraformApply "${*}"
+      terraformApply ${*}
       ;;
     output)
       installTerraform
@@ -108,4 +108,4 @@ function main {
   esac
 }
 
-main
+main "${*}"
