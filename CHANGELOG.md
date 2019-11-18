@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.2
+
+### Added
+
+* Added an `output` subcommand and corresponding `tf_actions_output` output.
+
+### Fixed
+
+* Fixed improper passing of arguments to the subcommand. ([#114](https://github.com/hashicorp/terraform-github-actions/issues/114))
+
 ## v0.6.1
 
 ### Fixed
