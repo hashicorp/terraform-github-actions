@@ -72,6 +72,7 @@ function main {
   source ${scriptDir}/terraform_plan.sh
   source ${scriptDir}/terraform_apply.sh
   source ${scriptDir}/terraform_output.sh
+  source ${scriptDir}/terraform_import.sh
 
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
@@ -100,6 +101,10 @@ function main {
     output)
       installTerraform
       terraformOutput ${*}
+      ;;
+    import)
+      installTerraform
+      terraformImport ${*}
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
