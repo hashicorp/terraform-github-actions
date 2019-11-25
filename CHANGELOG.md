@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.3
+
+### Added
+
+* Added the ability to configure a CLI credentials file to authenticate to Terraform Cloud/Enterprise.
+
 ## v0.6.2
 
 ### Added
