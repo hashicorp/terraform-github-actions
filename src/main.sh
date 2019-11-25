@@ -41,6 +41,26 @@ function parseInputs {
   if [ "${INPUT_TF_ACTIONS_COMMENT}" == "1" ] || [ "${INPUT_TF_ACTIONS_COMMENT}" == "true" ]; then
     tfComment=1
   fi
+
+  tfCLICredentialsHostname=""
+  if [ "${INPUT_TF_ACTIONS_CLI_CREDENTIALS_HOSTNAME}" != "" ]; then
+    tfCLICredentialsHostname=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_HOSTNAME}
+  fi
+
+  tfCLICredentialsToken=""
+  if [ "${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}" != "" ]; then
+    tfCLICredentialsToken=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}
+  fi
+}
+
+function configureCLICredentials {
+  if [[ ! -f "${HOME}/.terraformrc" ]] && [[ "${tfCLICredentialsToken}" != "" ]]; then
+    cat > ${HOME}/.terraformrc << EOF
+credentials "${tfCLICredentialsHostname}" {
+  token = "${tfCLICredentialsToken}"
+}
+EOF
+  fi
 }
 
 function installTerraform {
@@ -74,6 +94,7 @@ function main {
   source ${scriptDir}/terraform_output.sh
 
   parseInputs
+  configureCLICredentials
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
 
   case "${tfSubcommand}" in
