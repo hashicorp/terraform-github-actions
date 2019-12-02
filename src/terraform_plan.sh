@@ -63,5 +63,6 @@ ${planOutput}
   fi
 
   echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
+  echo ::set-output name=tf_actions_plan_output::${planOutput}
   exit ${planExitCode}
 }

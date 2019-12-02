@@ -82,6 +82,7 @@ Outputs are used to pass information to subsequent GitHub Actions steps.
 
 * `tf_actions_output` - The Terraform outputs in JSON format.
 * `tf_actions_plan_has_changes` - Whether or not the Terraform plan contained changes.
+* `tf_actions_plan_output` - The Terraform plan output.
 
 ## Secrets
 
