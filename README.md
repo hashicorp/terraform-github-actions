@@ -70,7 +70,7 @@ This was a simplified example showing the basic features of these Terraform GitH
 Inputs configure Terraform GitHub Actions to perform different actions.
 
 * `tf_actions_subcommand` - (Required) The Terraform subcommand to execute. Valid values are `fmt`, `init`, `validate`, `plan`, and `apply`.
-* `tf_actions_version` - (Required) The Terraform version to install and execute.
+* `tf_actions_version` - (Required) The Terraform version to install and execute. If set to `latest`, the latest stable version will be used.
 * `tf_actions_cli_credentials_hostname` - (Optional) Hostname for the CLI credentials file. Defaults to `app.terraform.io`.
 * `tf_actions_cli_credentials_token` - (Optional) Token for the CLI credentials file.
 * `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`.

@@ -64,6 +64,16 @@ EOF
 }
 
 function installTerraform {
+  if [[ "${tfVersion}" == "latest" ]]; then
+    echo "Checking the latest version of Terraform"
+    tfVersion=$(curl -sL https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | grep -v '[-].*' | sort -rV | head -n 1)
+
+    if [[ -z "${tfVersion}" ]]; then
+      echo "Failed to fetch the latest version"
+      exit 1
+    fi
+  fi
+
   url="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
 
   echo "Downloading Terraform v${tfVersion}"
