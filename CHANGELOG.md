@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.4
+
+### Added
+
+* Added the ability to download latest stable Terraform version when `tf_actions_version` is set to `latest`.
+
 ## v0.6.3
 
 ### Added
