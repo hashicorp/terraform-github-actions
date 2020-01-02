@@ -9,12 +9,14 @@ function terraformPlan {
   planCommentStatus="Failed"
 
   # Exit code of 0 indicates success with no changes. Print the output and exit.
-  if [ ${planExitCode} -eq 0 ]; then
-    echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
-    echo "${planOutput}"
-    echo
-    exit ${planExitCode}
-  fi
+## PATCH due to always exit 0 possibly from warnings? 
+#   if [ ${planExitCode} -eq 0 ]; then
+#     echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
+#     echo "${planOutput}"
+#     echo
+#     exit ${planExitCode}
+#   fi
+##
 
   # Exit code of 2 indicates success with changes. Print the output, change the
   # exit code to 0, and mark that the plan has changes.
