@@ -1,0 +1,32 @@
+name: 'Terraform GitHub Actions'
+description: 'Runs Terraform commands via GitHub Actions.'
+author: 'HashiCorp, Inc. Terraform Team <terraform@hashicorp.com>'
+branding:
+  icon: 'terminal'
+  color: 'purple'
+inputs:
+  tf_actions_subcommand:
+    description: 'Terraform subcommand to execute.'
+    required: true
+  tf_actions_version:
+    description: 'Terraform version to install.'
+    required: true
+  tf_actions_cli_credentials_hostname:
+    description: 'Hostname for the CLI credentials file.'
+    default: 'app.terraform.io'
+  tf_actions_cli_credentials_token:
+    description: 'Token for the CLI credentials file.'
+  tf_actions_comment:
+    description: 'Whether or not to comment on pull requests.'
+    default: true
+  tf_actions_working_dir:
+    description: 'Terraform working directory.'
+    default: '.'
+outputs:
+  tf_actions_output:
+    description: 'The Terraform outputs in JSON format.'
+  tf_actions_plan_has_changes:
+    description: 'Whether or not the Terraform plan contained changes.'
+runs:
+  using: 'docker'
+  image: './Dockerfile'
