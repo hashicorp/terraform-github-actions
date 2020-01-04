@@ -13,12 +13,12 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
-      - name: 'Terraform Outputs'
+      - name: 'Terraform Output'
         id: terraform
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
-          tf_actions_subcommand: 'outputs'
+          tf_actions_subcommand: 'output'
           tf_actions_working_dir: '.'
       - name: 'Use Terraform Output'
         run: echo ${{ steps.terraform.outputs.tf_actions_output  }}
