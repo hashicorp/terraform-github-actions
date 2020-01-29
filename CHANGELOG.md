@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.1
+
+### Fixed
+
+* Fixed missing `tf_actions_plan_has_changes` output when `plan` exit code is `0`. ([#136](https://github.com/hashicorp/terraform-github-actions/pull/136))
+
 ## v0.7.0
 
 ### Added
