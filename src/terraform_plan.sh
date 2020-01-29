@@ -13,6 +13,7 @@ function terraformPlan {
     echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
     echo "${planOutput}"
     echo
+    echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
     exit ${planExitCode}
   fi
 
