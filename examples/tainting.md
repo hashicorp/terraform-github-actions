@@ -1,6 +1,6 @@
 # Terraform Tainting
 
-Resources to taint can be specified using the `args` with option
+Resources to taint can be specified using the `args` with option.
 
 ```yaml
 name: 'Terraform GitHub Actions'
