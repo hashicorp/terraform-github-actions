@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Multiple resources can be specified by separating with spaces: `args: 'aws_instance.host1 aws_instance.host2'`
+Multiple resources can be specified by separating with spaces: `args: 'aws_instance.host1 aws_instance.host2'`.
