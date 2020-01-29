@@ -27,6 +27,8 @@ outputs:
     description: 'The Terraform outputs in JSON format.'
   tf_actions_plan_has_changes:
     description: 'Whether or not the Terraform plan contained changes.'
+  tf_actions_plan_output:
+    description: 'The Terraform plan output.'
 runs:
   using: 'docker'
   image: './Dockerfile'
