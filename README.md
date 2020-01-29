@@ -12,7 +12,7 @@ An exit code of `0` is considered a successful execution.
 
 ## Usage
 
-The most common workflow is to run `terraform fmt`, `terraform init`, `terraform validate`, and `terraform plan` on all of the Terraform files in the root of the repository when a pull request is opened or updated. A comment will be posted to the pull request depending on the output of the Terraform subcommand being executed. This workflow can be configured by adding the following content to the GitHub Actions workflow YAML file.
+The most common workflow is to run `terraform fmt`, `terraform init`, `terraform validate`, `terraform plan`, and `terraform taint` on all of the Terraform files in the root of the repository when a pull request is opened or updated. A comment will be posted to the pull request depending on the output of the Terraform subcommand being executed. This workflow can be configured by adding the following content to the GitHub Actions workflow YAML file.
 
 ```yaml
 name: 'Terraform GitHub Actions'
