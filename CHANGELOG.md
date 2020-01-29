@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.7.0
+
+### Added
+
+* Added `tf_actions_plan_output` output. ([#119](https://github.com/hashicorp/terraform-github-actions/pull/119))
+
+### Changed
+
+* Removed unecessary step in `Dockerfile`. ([#132](https://github.com/hashicorp/terraform-github-actions/pull/132))
+
+### Fixed
+
+* Process multi-line outputs correctly. ([#116](https://github.com/hashicorp/terraform-github-actions/pull/116))
+* Fixed typo in outputs documentation. ([#126](https://github.com/hashicorp/terraform-github-actions/pull/126))
+
 ## v0.6.4
 
 ### Added
