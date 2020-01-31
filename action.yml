@@ -22,6 +22,9 @@ inputs:
   tf_actions_working_dir:
     description: 'Terraform working directory.'
     default: '.'
+  tf_actions_fmt_write:
+    description: 'Write Terraform fmt changes to source files.'
+    default: false
 outputs:
   tf_actions_output:
     description: 'The Terraform outputs in JSON format.'

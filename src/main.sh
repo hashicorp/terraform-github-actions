@@ -51,6 +51,11 @@ function parseInputs {
   if [ "${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}" != "" ]; then
     tfCLICredentialsToken=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}
   fi
+
+  tfFmtWrite="false"
+  if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" != "" ]; then
+    tfFmtWrite=${INPUT_TF_ACTIONS_FMT_WRITE}
+  fi
 }
 
 function configureCLICredentials {
