@@ -63,6 +63,18 @@ EOF
   fi
 }
 
+function configureGitCredentials {
+  if [[ ! -z "${GH_USER}" ]] && [[ ! -z "${GH_PASS}" ]]; then
+    cat > ${HOME}/.git-credentials << EOF
+https://${GH_USER}:${GH_PASS}@github.com/
+EOF
+
+    git config --global credential.helper store
+    git config --global "url.https://github.com/.insteadOf" "ssh://git@github.com/"
+    git config --global --add "url.https://github.com/.insteadOf" "git@github.com:"
+  fi
+}
+
 function installTerraform {
   if [[ "${tfVersion}" == "latest" ]]; then
     echo "Checking the latest version of Terraform"
@@ -105,6 +117,7 @@ function main {
 
   parseInputs
   configureCLICredentials
+  configureGitCredentials
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
 
   case "${tfSubcommand}" in
