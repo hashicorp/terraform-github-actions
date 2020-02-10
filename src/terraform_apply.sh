@@ -20,7 +20,7 @@ function terraformApply {
     echo "apply: error: failed to apply Terraform configuration in ${tfWorkingDir}"
     echo "${applyOutput}"
     echo
-    echo "apply: info: destroying failed Terraform infrastruture in ${tfWorkingDir}"
+    echo "apply: info: destroying failed Terraform infrastructure in ${tfWorkingDir}"
     destroyOutput=$(terraform destroy -auto-approve ${*} 2>&1)
     destroyExitCode=${?}
     if [ ${destroyExitCode} -ne 0 ]; then
