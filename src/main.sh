@@ -103,6 +103,7 @@ function main {
   source ${scriptDir}/terraform_apply.sh
   source ${scriptDir}/terraform_output.sh
   source ${scriptDir}/terraform_import.sh
+  source ${scriptDir}/terraform_taint.sh
 
   parseInputs
   configureCLICredentials
@@ -136,6 +137,10 @@ function main {
     import)
       installTerraform
       terraformImport ${*}
+      ;;
+    taint)
+      installTerraform
+      terraformTaint ${*}
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
