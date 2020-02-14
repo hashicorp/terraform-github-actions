@@ -69,9 +69,18 @@ function configureGitCredentials {
 https://${GH_USER}:${GH_PASS}@github.com/
 EOF
 
+    currRules=$(git config --global --get-all "url.https://github.com/.insteadOf")
     git config --global credential.helper store
-    git config --global "url.https://github.com/.insteadOf" "ssh://git@github.com/"
-    git config --global --add "url.https://github.com/.insteadOf" "git@github.com:"
+
+    sshRule="ssh://git@github.com/"
+    if [[ $currRules != *"$sshRule"* ]]; then
+      git config --global --add "url.https://github.com/.insteadOf" "$sshRule"
+    fi
+
+    gitRule="git@github.com:"
+    if [[ $currRules != *"$gitRule"* ]]; then
+      git config --global --add "url.https://github.com/.insteadOf" "$gitRule"
+    fi
   fi
 }
 
