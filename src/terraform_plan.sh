@@ -13,6 +13,7 @@ function terraformPlan {
     echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
     echo "${planOutput}"
     echo
+    echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
     exit ${planExitCode}
   fi
 
@@ -63,5 +64,12 @@ ${planOutput}
   fi
 
   echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
+
+  # https://github.community/t5/GitHub-Actions/set-output-Truncates-Multiline-Strings/m-p/38372/highlight/true#M3322
+  planOutput="${planOutput//'%'/'%25'}"
+  planOutput="${planOutput//$'\n'/'%0A'}"
+  planOutput="${planOutput//$'\r'/'%0D'}"
+
+  echo "::set-output name=tf_actions_plan_output::${planOutput}"
   exit ${planExitCode}
 }
