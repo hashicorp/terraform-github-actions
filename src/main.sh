@@ -103,6 +103,7 @@ function main {
   source ${scriptDir}/terraform_apply.sh
   source ${scriptDir}/terraform_output.sh
   source ${scriptDir}/terraform_import.sh
+  source ${scriptDir}/terraform_taint.sh
   source ${scriptDir}/terraform_destroy.sh
 
   parseInputs
@@ -137,6 +138,10 @@ function main {
     import)
       installTerraform
       terraformImport ${*}
+      ;;
+    taint)
+      installTerraform
+      terraformTaint ${*}
       ;;
     destroy)
       installTerraform
