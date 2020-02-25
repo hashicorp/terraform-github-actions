@@ -53,7 +53,7 @@ function parseInputs {
   fi
 
   tfFmtWrite="false"
-  if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" != "" ]; then
+  if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "1" ] || [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "true" ]; then
     tfFmtWrite=${INPUT_TF_ACTIONS_FMT_WRITE}
   fi
 }
