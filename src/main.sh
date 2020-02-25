@@ -52,7 +52,7 @@ function parseInputs {
     tfCLICredentialsToken=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}
   fi
 
-  tfFmtWrite="false"
+  tfFmtWrite=0
   if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "1" ] || [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "true" ]; then
     tfFmtWrite=${INPUT_TF_ACTIONS_FMT_WRITE}
   fi
