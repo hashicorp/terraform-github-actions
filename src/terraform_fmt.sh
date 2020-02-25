@@ -70,7 +70,7 @@ ${fmtComment}
   echo "::set-output name=tf_actions_fmt_written::false"
   if [ "${tfFmtWrite}" == "true" ]; then
     echo "fmt: info: Terraform files in ${tfWorkingDir} will be formatted"
-    terraform fmt -write=true "${*}"
+    terraform fmt -write=true ${fmtRecursive}"${*}"
     fmtExitCode=${?}
     echo "::set-output name=tf_actions_fmt_written::true"
   fi
