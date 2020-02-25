@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.8.0
+
+### Added
+
+* Added an `import` subcommand. ([#117](https://github.com/hashicorp/terraform-github-actions/pull/117))
+* Added a `taint` subcommand. ([#134](https://github.com/hashicorp/terraform-github-actions/pull/134))
+
+### Changed
+
+* Use unary operator to test for non-empty variable. ([#145](https://github.com/hashicorp/terraform-github-actions/pull/145))
+
 ## v0.7.1
 
 ### Fixed
