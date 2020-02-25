@@ -26,7 +26,7 @@ function terraformTaint {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
-    loadWorkspace
+    tfWorkspace=$(loadWorkspace)
     taintCommentWrapper="#### \`terraform taint\` ${taintCommentStatus}
 <details><summary>Show Output</summary>
 

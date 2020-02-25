@@ -21,7 +21,7 @@ function terraformInit {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
-    loadWorkspace
+    tfWorkspace=$(loadWorkspace)
     initCommentWrapper="#### \`terraform init\` Failed
 
 \`\`\`

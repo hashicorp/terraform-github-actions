@@ -39,7 +39,7 @@ function terraformFmt {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
-    loadWorkspace
+    tfWorkspace=$(loadWorkspace)
     fmtComment=""
     for file in ${fmtFileList}; do
       fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')

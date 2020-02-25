@@ -94,10 +94,14 @@ function installTerraform {
 }
 
 function loadWorkspace {
-  if ! tfWorkspace=$(terraform workspace show 2>&1) ; then
-    echo "warning: couldn't determine terraform workspace: $tfWorkspace"
-    tfWorkspace="<unknown>"
-  fi
+  (
+    unset TF_CLI_ARGS
+    if ! out=$(terraform workspace show 2>&1) ; then
+      echo "warning: couldn't determine terraform workspace: $tfWorkspace"
+      out="<unknown>"
+    fi
+    echo ${out}
+  )
 }
 
 function main {

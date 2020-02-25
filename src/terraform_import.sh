@@ -24,7 +24,7 @@ function terraformImport {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ] && [ "${importCommentStatus}" == "Failed" ]; then
-    loadWorkspace
+    tfWorkspace=$(loadWorkspace)
     importCommentWrapper="#### \`terraform import\` ${importCommentStatus}
 <details><summary>Show Output</summary>
 
