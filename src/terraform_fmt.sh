@@ -39,6 +39,7 @@ function terraformFmt {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+    loadWorkspace
     fmtComment=""
     for file in ${fmtFileList}; do
       fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
@@ -56,7 +57,7 @@ ${fmtFileDiff}
     fmtCommentWrapper="#### \`terraform fmt\` Failed
 ${fmtComment}
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`$(terraform workspace show)\`*"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`${tfWorkspace}\`*"
 
     fmtCommentWrapper=$(stripColors "${fmtCommentWrapper}")
     echo "fmt: info: creating JSON"

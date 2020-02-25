@@ -26,6 +26,7 @@ function terraformTaint {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+    loadWorkspace
     taintCommentWrapper="#### \`terraform taint\` ${taintCommentStatus}
 <details><summary>Show Output</summary>
 
@@ -35,7 +36,7 @@ ${taintOutput}
 
 </details>
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`$(terraform workspace show)\`*"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`${tfWorkspace}\`*"
 
     taintCommentWrapper=$(stripColors "${taintCommentWrapper}")
     echo "taint: info: creating JSON"

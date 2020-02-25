@@ -93,6 +93,13 @@ function installTerraform {
   echo "Successfully unzipped Terraform v${tfVersion}"
 }
 
+function loadWorkspace {
+  if ! tfWorkspace=$(terraform workspace show 2>&1) ; then
+    echo "warning: couldn't determine terraform workspace: $tfWorkspace"
+    tfWorkspace="<unknown>"
+  fi
+}
+
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})

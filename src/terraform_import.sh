@@ -24,6 +24,7 @@ function terraformImport {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ] && [ "${importCommentStatus}" == "Failed" ]; then
+    loadWorkspace
     importCommentWrapper="#### \`terraform import\` ${importCommentStatus}
 <details><summary>Show Output</summary>
 
@@ -33,7 +34,7 @@ ${importOutput}
 
 </details>
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`$(terraform workspace show)\`*"
+*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`, Workspace: \`${tfWorkspace}\`*"
 
     importCommentWrapper=$(stripColors "${importCommentWrapper}")
     echo "import: info: creating JSON"
