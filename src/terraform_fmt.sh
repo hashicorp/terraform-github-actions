@@ -68,7 +68,7 @@ ${fmtComment}
 
   # Write changes to branch
   echo "::set-output name=tf_actions_fmt_written::false"
-  if [ "${tfFmtWrite}" == "true" ]; then
+  if [ "${tfFmtWrite}" == "1" ]; then
     echo "fmt: info: Terraform files in ${tfWorkingDir} will be formatted"
     terraform fmt -write=true ${fmtRecursive}"${*}"
     fmtExitCode=${?}
