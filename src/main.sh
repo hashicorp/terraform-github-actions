@@ -33,7 +33,7 @@ function parseInputs {
 
   # Optional inputs
   tfWorkingDir="."
-  if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "." ]; then
+  if [[ -n "${INPUT_TF_ACTIONS_WORKING_DIR}" ]]; then
     tfWorkingDir=${INPUT_TF_ACTIONS_WORKING_DIR}
   fi
 
