@@ -54,7 +54,7 @@ function parseInputs {
 
   tfFmtWrite=0
   if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "1" ] || [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "true" ]; then
-    tfFmtWrite=${INPUT_TF_ACTIONS_FMT_WRITE}
+    tfFmtWrite=1
   fi
 }
 
