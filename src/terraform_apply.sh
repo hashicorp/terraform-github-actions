@@ -23,7 +23,7 @@ function terraformApply {
   fi
 
   # Comment on the pull request if necessary.
-  if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+  if [ "${tfComment}" == "1" ] && [ -n "${tfCommentUrl}" ]; then
     applyCommentWrapper="#### \`terraform apply\` ${applyCommentStatus}
 <details><summary>Show Output</summary>
 
@@ -38,9 +38,8 @@ ${applyOutput}
     applyCommentWrapper=$(stripColors "${applyCommentWrapper}")
     echo "apply: info: creating JSON"
     applyPayload=$(echo "${applyCommentWrapper}" | jq -R --slurp '{body: .}')
-    applyCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "apply: info: commenting on the pull request"
-    echo "${applyPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${applyCommentsURL}" > /dev/null
+    echo "${applyPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${tfCommentUrl}" > /dev/null
   fi
 
   exit ${applyExitCode}

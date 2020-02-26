@@ -20,7 +20,7 @@ function terraformValidate {
   echo
 
   # Comment on the pull request if necessary.
-  if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+  if [ "${tfComment}" == "1" ] && [ -n "${tfCommentUrl}" ]; then
     validateCommentWrapper="#### \`terraform validate\` Failed
 
 \`\`\`
@@ -32,9 +32,8 @@ ${validateOutput}
     validateCommentWrapper=$(stripColors "${validateCommentWrapper}")
     echo "validate: info: creating JSON"
     validatePayload=$(echo "${validateCommentWrapper}" | jq -R --slurp '{body: .}')
-    validateCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "validate: info: commenting on the pull request"
-    echo "${validatePayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${validateCommentsURL}" > /dev/null
+    echo "${validatePayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${tfCommentUrl}" > /dev/null
   fi
 
   exit ${validateExitCode}

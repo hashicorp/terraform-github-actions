@@ -38,7 +38,7 @@ function terraformFmt {
   echo
 
   # Comment on the pull request if necessary.
-  if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+  if [ "${tfComment}" == "1" ] && [ -n "${tfCommentUrl}" ]; then
     fmtComment=""
     for file in ${fmtFileList}; do
       fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
@@ -61,9 +61,8 @@ ${fmtComment}
     fmtCommentWrapper=$(stripColors "${fmtCommentWrapper}")
     echo "fmt: info: creating JSON"
     fmtPayload=$(echo "${fmtCommentWrapper}" | jq -R --slurp '{body: .}')
-    fmtCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "fmt: info: commenting on the pull request"
-    echo "${fmtPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${fmtCommentsURL}" > /dev/null
+    echo "${fmtPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${tfCommentUrl}" > /dev/null
   fi
 
   # Write changes to branch

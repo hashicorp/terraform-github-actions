@@ -25,7 +25,7 @@ function terraformTaint {
   fi
 
   # Comment on the pull request if necessary.
-  if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+  if [ "${tfComment}" == "1" ] && [ -n "${tfCommentUrl}" ]; then
     taintCommentWrapper="#### \`terraform taint\` ${taintCommentStatus}
 <details><summary>Show Output</summary>
 
@@ -40,9 +40,8 @@ ${taintOutput}
     taintCommentWrapper=$(stripColors "${taintCommentWrapper}")
     echo "taint: info: creating JSON"
     taintPayload=$(echo "${taintCommentWrapper}" | jq -R --slurp '{body: .}')
-    taintCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "taint: info: commenting on the pull request"
-    echo "${taintPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${taintCommentsURL}" > /dev/null
+    echo "${taintPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${tfCommentUrl}" > /dev/null
   fi
 
   exit ${taintExitCode}

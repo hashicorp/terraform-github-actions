@@ -20,7 +20,7 @@ function terraformInit {
   echo
 
   # Comment on the pull request if necessary.
-  if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
+  if [ "${tfComment}" == "1" ] && [ -n "${tfCommentUrl}" ]; then
     initCommentWrapper="#### \`terraform init\` Failed
 
 \`\`\`
@@ -32,9 +32,8 @@ ${initOutput}
     initCommentWrapper=$(stripColors "${initCommentWrapper}")
     echo "init: info: creating JSON"
     initPayload=$(echo "${initCommentWrapper}" | jq -R --slurp '{body: .}')
-    initCommentsURL=$(cat ${GITHUB_EVENT_PATH} | jq -r .pull_request.comments_url)
     echo "init: info: commenting on the pull request"
-    echo "${initPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${initCommentsURL}" > /dev/null
+    echo "${initPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${tfCommentUrl}" > /dev/null
   fi
 
   exit ${initExitCode}

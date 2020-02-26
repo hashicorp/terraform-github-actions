@@ -19,6 +19,9 @@ inputs:
   tf_actions_comment:
     description: 'Whether or not to comment on pull requests.'
     default: true
+  tf_actions_comment_url:
+    description: 'Issue / Pull Request URL to comment on.'
+    default: ''
   tf_actions_working_dir:
     description: 'Terraform working directory.'
     default: '.'

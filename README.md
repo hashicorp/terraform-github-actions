@@ -76,7 +76,8 @@ Inputs configure Terraform GitHub Actions to perform different actions.
 * `tf_actions_version` - (Required) The Terraform version to install and execute. If set to `latest`, the latest stable version will be used.
 * `tf_actions_cli_credentials_hostname` - (Optional) Hostname for the CLI credentials file. Defaults to `app.terraform.io`.
 * `tf_actions_cli_credentials_token` - (Optional) Token for the CLI credentials file.
-* `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`.
+* `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`. If set to `true`, make sure you specify the [`GITHUB_TOKEN` environment variable](#environment-variables).
+* `tf_actions_comment_url` - (Optional) URL of issue/pull request to comment on. Defaults to the active pull request for [`pull_request` events](https://help.github.com/en/actions/reference/events-that-trigger-workflows), otherwise unset (no comment will be posted). The format is `https://api.github.com/repos/octocat/Hello-World/issues/1347/comments`, eg what is returned as `comments_url` [from GitHub API requests](https://developer.github.com/v3/pulls/#get-a-single-pull-request).
 * `tf_actions_working_dir` - (Optional) The working directory to change into before executing Terraform subcommands. Defaults to `.` which means use the root of the GitHub repository.
 * `tf_actions_fmt_write` - (Optional) Whether or not to write `fmt` changes to source files. Defaults to `false`.
 
@@ -91,13 +92,9 @@ Outputs are used to pass information to subsequent GitHub Actions steps.
 
 ## Secrets
 
-Secrets are similar to inputs except that they are encrypted and only used by GitHub Actions. It's a convenient way to keep sensitive data out of the GitHub Actions workflow YAML file.
+Secrets are similar to inputs except that they are encrypted and only used by GitHub Actions. It's a convenient way to keep sensitive data out of the GitHub Actions workflow YAML file. Secrets can store data needed to authenticate with Terraform backends and providers.
 
-* `GITHUB_TOKEN` - (Optional) The GitHub API token used to post comments to pull requests. Not required if the `tf_actions_comment` input is set to `false`.
-
-Other secrets may be needed to authenticate with Terraform backends and providers.
-
-**WARNING:** These secrets could be exposed if the action is executed on a malicious Terraform file. To avoid this, it is recommended not to use these Terraform GitHub Actions on repositories where untrusted users can submit pull requests.
+**WARNING:** Secrets could be exposed if the action is executed on a malicious Terraform file. To avoid this, it is recommended not to use these Terraform GitHub Actions on repositories where untrusted users can submit pull requests.
 
 ## Environment Variables
 
@@ -110,5 +107,6 @@ The usual [Terraform environment variables](https://www.terraform.io/docs/comman
 * [`TF_CLI_ARGS`](https://www.terraform.io/docs/commands/environment-variables.html#tf_cli_args-and-tf_cli_args_name)
 * [`TF_CLI_ARGS_name`](https://www.terraform.io/docs/commands/environment-variables.html#tf_cli_args-and-tf_cli_args_name)
 * `TF_WORKSPACE`
+* `GITHUB_TOKEN` - The GitHub API token used to post comments to pull requests. Not required if the `tf_actions_comment` input is set to `false`. Set like this: `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
 
 Other environment variables may be configured to pass data into Terraform. If the data is sensitive, consider using [secrets](#secrets) instead.
