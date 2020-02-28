@@ -51,6 +51,8 @@ function parseInputs {
   if [ "${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}" != "" ]; then
     tfCLICredentialsToken=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}
   fi
+
+  tfWorkspace=${TF_WORKSPACE:-default}
 }
 
 function configureCLICredentials {
@@ -91,17 +93,6 @@ function installTerraform {
     exit 1
   fi
   echo "Successfully unzipped Terraform v${tfVersion}"
-}
-
-function loadWorkspace {
-  (
-    unset TF_CLI_ARGS
-    if ! out=$(terraform workspace show 2>&1) ; then
-      echo "warning: couldn't determine terraform workspace: $tfWorkspace"
-      out="<unknown>"
-    fi
-    echo ${out}
-  )
 }
 
 function main {

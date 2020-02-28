@@ -44,7 +44,6 @@ function terraformPlan {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ] && ([ "${planHasChanges}" == "true" ] || [ "${planCommentStatus}" == "Failed" ]); then
-    tfWorkspace=$(loadWorkspace)
     planCommentWrapper="#### \`terraform plan\` ${planCommentStatus}
 <details><summary>Show Output</summary>
 
