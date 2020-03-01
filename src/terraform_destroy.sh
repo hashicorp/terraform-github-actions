@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function terraformdestroy {
+function terraformDestroy {
   # Gather the output of `terraform destroy`.
   echo "destroy: info: destroying Terraform configuration in ${tfWorkingDir}"
   destroyOutput=$(terraform destroy -auto-approve -input=false ${*} 2>&1)
