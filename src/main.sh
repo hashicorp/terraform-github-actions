@@ -101,6 +101,7 @@ function main {
   source ${scriptDir}/terraform_validate.sh
   source ${scriptDir}/terraform_plan.sh
   source ${scriptDir}/terraform_apply.sh
+  source ${scriptDir}/terraform_destroy.sh
   source ${scriptDir}/terraform_output.sh
   source ${scriptDir}/terraform_import.sh
   source ${scriptDir}/terraform_taint.sh
@@ -129,6 +130,10 @@ function main {
     apply)
       installTerraform
       terraformApply ${*}
+      ;;
+    destroy)
+      installTerraform
+      terraformDestroy ${*}
       ;;
     output)
       installTerraform
