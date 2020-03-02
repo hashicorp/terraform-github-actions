@@ -46,4 +46,3 @@ ${destroyOutput}
   exit ${destroyExitCode}
 }
 
-
