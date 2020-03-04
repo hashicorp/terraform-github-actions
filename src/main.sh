@@ -51,6 +51,11 @@ function parseInputs {
   if [ "${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}" != "" ]; then
     tfCLICredentialsToken=${INPUT_TF_ACTIONS_CLI_CREDENTIALS_TOKEN}
   fi
+
+  tfWorkspace="default"
+  if [ -n "${TF_WORKSPACE}" ]; then
+    tfWorkspace="${TF_WORKSPACE}"
+  fi
 }
 
 function configureCLICredentials {
