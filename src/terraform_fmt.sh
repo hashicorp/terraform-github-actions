@@ -66,5 +66,14 @@ ${fmtComment}
     echo "${fmtPayload}" | curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" --header "Content-Type: application/json" --data @- "${fmtCommentsURL}" > /dev/null
   fi
 
+  # Write changes to branch
+  echo "::set-output name=tf_actions_fmt_written::false"
+  if [ "${tfFmtWrite}" == "1" ]; then
+    echo "fmt: info: Terraform files in ${tfWorkingDir} will be formatted"
+    terraform fmt -write=true ${fmtRecursive} "${*}"
+    fmtExitCode=${?}
+    echo "::set-output name=tf_actions_fmt_written::true"
+  fi
+
   exit ${fmtExitCode}
 }

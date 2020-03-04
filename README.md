@@ -75,6 +75,7 @@ Inputs configure Terraform GitHub Actions to perform different actions.
 * `tf_actions_cli_credentials_token` - (Optional) Token for the CLI credentials file.
 * `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`.
 * `tf_actions_working_dir` - (Optional) The working directory to change into before executing Terraform subcommands. Defaults to `.` which means use the root of the GitHub repository.
+* `tf_actions_fmt_write` - (Optional) Whether or not to write `fmt` changes to source files. Defaults to `false`.
 
 ## Outputs
 
@@ -83,6 +84,7 @@ Outputs are used to pass information to subsequent GitHub Actions steps.
 * `tf_actions_output` - The Terraform outputs in (stringified) JSON format.
 * `tf_actions_plan_has_changes` - `'true'` if the Terraform plan contained changes, otherwise `'false'`.
 * `tf_actions_plan_output` - The Terraform plan output.
+* `tf_actions_fmt_written` - Whether or not the Terraform formatting from `fmt` was written to source files.
 
 ## Secrets
 
