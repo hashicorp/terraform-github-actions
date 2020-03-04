@@ -33,7 +33,7 @@ function parseInputs {
 
   # Optional inputs
   tfWorkingDir="."
-  if [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "" ] || [ "${INPUT_TF_ACTIONS_WORKING_DIR}" != "." ]; then
+  if [[ -n "${INPUT_TF_ACTIONS_WORKING_DIR}" ]]; then
     tfWorkingDir=${INPUT_TF_ACTIONS_WORKING_DIR}
   fi
 
@@ -55,6 +55,11 @@ function parseInputs {
   tfFmtWrite=0
   if [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "1" ] || [ "${INPUT_TF_ACTIONS_FMT_WRITE}" == "true" ]; then
     tfFmtWrite=1
+  fi
+
+  tfWorkspace="default"
+  if [ -n "${TF_WORKSPACE}" ]; then
+    tfWorkspace="${TF_WORKSPACE}"
   fi
 }
 
@@ -107,6 +112,8 @@ function main {
   source ${scriptDir}/terraform_plan.sh
   source ${scriptDir}/terraform_apply.sh
   source ${scriptDir}/terraform_output.sh
+  source ${scriptDir}/terraform_import.sh
+  source ${scriptDir}/terraform_taint.sh
 
   parseInputs
   configureCLICredentials
@@ -136,6 +143,14 @@ function main {
     output)
       installTerraform
       terraformOutput ${*}
+      ;;
+    import)
+      installTerraform
+      terraformImport ${*}
+      ;;
+    taint)
+      installTerraform
+      terraformTaint ${*}
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
