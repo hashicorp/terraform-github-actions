@@ -19,7 +19,7 @@ name: 'Terraform GitHub Actions'
 on:
   - pull_request
 env:
-  tf_version: 0.12.13
+  tf_version: 'latest'
   tf_working_dir: '.'
 jobs:
   terraform:
