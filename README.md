@@ -18,6 +18,9 @@ The most common workflow is to run `terraform fmt`, `terraform init`, `terraform
 name: 'Terraform GitHub Actions'
 on:
   - pull_request
+env:
+  tf_version: 'latest'
+  tf_working_dir: '.'
 jobs:
   terraform:
     name: 'Terraform'
@@ -28,36 +31,36 @@ jobs:
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
-          tf_actions_version: 0.12.13
+          tf_actions_version: ${{ env.tf_version }}
           tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: '.'
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Init'
         uses: hashicorp/terraform-github-actions@master
         with:
-          tf_actions_version: 0.12.13
+          tf_actions_version: ${{ env.tf_version }}
           tf_actions_subcommand: 'init'
-          tf_actions_working_dir: '.'
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Validate'
         uses: hashicorp/terraform-github-actions@master
         with:
-          tf_actions_version: 0.12.13
+          tf_actions_version: ${{ env.tf_version }}
           tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: '.'
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Plan'
         uses: hashicorp/terraform-github-actions@master
         with:
-          tf_actions_version: 0.12.13
+          tf_actions_version: ${{ env.tf_version }}
           tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: '.'
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
