@@ -8,6 +8,7 @@ function terraformPlan {
   planHasChanges=false
   planCommentStatus="Failed"
 
+  # filer out the secrets from the output
   planOutput=$(echo "${planOutput}" | egrep -v 'client_certificate|client_key|cluster_ca_certificate|password')
   
   # Exit code of 0 indicates success with no changes. Print the output and exit.
