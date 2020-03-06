@@ -7,6 +7,9 @@ function terraformApply {
   applyExitCode=${?}
   applyCommentStatus="Failed"
 
+  # filer out the secrets from the output
+  applyOutput=$(echo $applyOutput | grep -v -E '(client_certificate|client_key|cluster_ca_certificate|password)') 
+
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${applyExitCode} -eq 0 ]; then
     echo "apply: info: successfully applied Terraform configuration in ${tfWorkingDir}"
