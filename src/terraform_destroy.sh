@@ -7,6 +7,9 @@ function terraformDestroy {
   destroyExitCode=${?}
   destroyCommentStatus="Failed"
 
+  # filer out the secrets from the output
+  destroyOutput=$(echo "${destroyOutput}" | egrep -v 'client_certificate|client_key|cluster_ca_certificate|password') 
+
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${destroyExitCode} -eq 0 ]; then
     echo "destroy: info: successfully destroyed Terraform-managed infrastructure in ${tfWorkingDir}"
