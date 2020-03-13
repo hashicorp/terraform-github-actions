@@ -31,7 +31,9 @@ outputs:
   tf_actions_plan_has_changes:
     description: 'Whether or not the Terraform plan contained changes.'
   tf_actions_plan_output:
-    description: 'The Terraform plan output.'
+    description: 'The Terraform plan output (may be truncated).'
+  tf_actions_plan_output_file:
+    description: 'Path to file containing the full plan output.'
   tf_actions_fmt_written:
     description: 'Whether or not the Terraform formatting was written to source files.'
 runs:
