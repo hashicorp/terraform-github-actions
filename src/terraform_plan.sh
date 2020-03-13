@@ -31,6 +31,11 @@ function terraformPlan {
     fi
     planOutput=$(echo "${planOutput}" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
 
+    # Save plan output to a file so it can optionally be added as an artifact (long plans are truncated)
+    planOutputFile=plan.txt
+    echo "${planOutput}" > "${planOutputFile}"
+    echo "::set-output name=tf_actions_plan_output_file::${planOutputFile}"
+
      # If output is longer than max length (65536 characters), keep last part
     planOutput=$(echo "${planOutput}" | tail -c 65000 )
   fi
