@@ -19,7 +19,9 @@ on:
 
 jobs:
   deploy:
-    # Only run for comments starting with "apply " in a pull request.
+    # Only run for
+    # 1. Comments starting with "apply "
+    # 2. In a pull request (startsWith fails if the key doesn't exist)
     if: >
       startsWith(github.event.comment.body, 'apply ')
       && startsWith(github.event.issue.pull_request.url, 'https://')
@@ -27,22 +29,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Load PR details
-        id: load-pr
+        id: pr
         run: |
           set -eu
+
           resp=$(curl -sSf \
             --url ${{ github.event.issue.pull_request.url }} \
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'content-type: application/json')
+
           sha=$(jq -r '.head.sha' <<< "$resp")
           echo "::set-output name=head_sha::$sha"
-          comments_url=$(jq -r '.comments_url')
+
+          comments_url=$(jq -r '.comments_url' <<< "$resp")
           echo "::set-output name=comments_url::$comments_url"
       - name: Checkout
         uses: actions/checkout@v2.0.0
         with:
           # By default (in a non-pull request build) you get HEAD of 'master'
-          ref: ${{ steps.load-pr.outputs.head_sha }}
+          ref: ${{ steps.pr.outputs.head_sha }}
       - name: Terraform Init
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -54,7 +59,7 @@ jobs:
           tf_actions_version: latest
           tf_actions_subcommand: apply
           tf_actions_comment: true # default, but being explicit
-          tf_actions_comment: ${{ steps.load-pr.outputs.comments_url }}
+          tf_actions_comment_url: ${{ steps.pr.outputs.comments_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
