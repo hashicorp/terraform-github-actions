@@ -15,7 +15,7 @@ ${raw_message}
     return
   fi
 
-  echo "init: info: commenting on the pull request"
+  echo "${GITHUB_ACTION}: info: commenting on pull request"
   local message=$(stripColors "${wrapped_raw_message}")
   local payload=$(echo "${message}" | jq -R --slurp '{body: .}')
   local commentURL=$(jq -r .pull_request.comments_url "${GITHUB_EVENT_PATH}")
