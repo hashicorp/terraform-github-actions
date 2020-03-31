@@ -61,6 +61,15 @@ function parseInputs {
   if [ -n "${TF_WORKSPACE}" ]; then
     tfWorkspace="${TF_WORKSPACE}"
   fi
+
+  tfInitCreateWorkspace="0"
+  if [ "${INPUT_TF_ACTIONS_INIT_CREATE_WORKSPACE}" == "1" ] || [ "${INPUT_TF_ACTIONS_INIT_CREATE_WORKSPACE}" == "true" ]; then
+    tfInitCreateWorkspace=1
+  fi
+  if [ "${tfInitCreateWorkspace}" == "1" ] && [ "${tfSubcommand}" != "init" ]; then
+    echo "You can only specify input 'tf_actions_init_create_workspace' when 'tf_actions_subcommand' is 'init'"
+    exit 1
+  fi
 }
 
 function configureCLICredentials {

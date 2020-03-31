@@ -79,6 +79,19 @@ Inputs configure Terraform GitHub Actions to perform different actions.
 * `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`.
 * `tf_actions_working_dir` - (Optional) The working directory to change into before executing Terraform subcommands. Defaults to `.` which means use the root of the GitHub repository.
 * `tf_actions_fmt_write` - (Optional) Whether or not to write `fmt` changes to source files. Defaults to `false`.
+* `tf_actions_init_create_workspace` - (Optional) Whether or not to automatically create the specified workspace during `init`. See the dedicated section for more info. Defaults to `false`.
+
+### `tf_actions_init_create_workspace`
+
+If set to `true`, your `terraform init` step will first run the following extra steps:
+
+1. Run `terraform init` for the "default" workspace (with any custom `args` specified)
+2. Check the requested workspace exists and create it if not.
+
+Then, initialization with your requested workspace will proceed as per usual.
+
+Specify your target workspace with the [`TF_WORKSPACE` environment variable](#environment-variables).
+
 
 ## Outputs
 
