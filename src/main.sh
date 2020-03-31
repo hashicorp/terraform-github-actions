@@ -106,6 +106,9 @@ function installTerraform {
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})
+  # Common functions
+  source ${scriptDir}/send_comment.sh
+  # Actions
   source ${scriptDir}/terraform_fmt.sh
   source ${scriptDir}/terraform_init.sh
   source ${scriptDir}/terraform_validate.sh
