@@ -20,14 +20,14 @@ function parseInputs {
   if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
     tfVersion=${INPUT_TF_ACTIONS_VERSION}
   else
-    echo "Input terraform_version cannot be empty"
+    echo "Input tf_actions_version cannot be empty"
     exit 1
   fi
 
   if [ "${INPUT_TF_ACTIONS_SUBCOMMAND}" != "" ]; then
     tfSubcommand=${INPUT_TF_ACTIONS_SUBCOMMAND}
   else
-    echo "Input terraform_subcommand cannot be empty"
+    echo "Input tf_actions_subcommand cannot be empty"
     exit 1
   fi
 
