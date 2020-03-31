@@ -103,6 +103,18 @@ function installTerraform {
   echo "Successfully unzipped Terraform v${tfVersion}"
 }
 
+# Generate a pretty git commit string.
+# If possible show "$subject ($short_sha)", otherwise "$short_sha". (The former
+# will fail if we are running without a code checkout. For example, in a
+# workflow that only downloads a plan and applies it.)
+function pretty_git_commit() {
+  local message
+  if ! message=$(git log -1 --pretty="%s (%h)" 2>&1); then
+    message="${GITHUB_SHA:0:7}"
+  fi
+  echo "$message"
+}
+
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})

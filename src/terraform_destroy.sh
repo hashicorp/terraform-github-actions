@@ -33,7 +33,7 @@ ${destroyOutput}
 
 </details>
 
-*Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
+*Commit: \`$(pretty_git_commit)\`, Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"
 
     destroyCommentWrapper=$(stripColors "${destroyCommentWrapper}")
     echo "destroy: info: creating JSON"
