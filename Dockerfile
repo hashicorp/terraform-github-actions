@@ -1,7 +1,5 @@
-# FROM alpine:3 
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 
-# RUN ["/bin/sh", "-c", "apk add --update --no-cache bash ca-certificates curl git jq openssh openssl"]
 RUN apt update
 RUN apt upgrade
 RUN apt install bash -y 
