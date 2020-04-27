@@ -26,8 +26,9 @@ function terraformPlan {
     echo "plan: info: successfully planned Terraform configuration in ${tfWorkingDir}"
     echo "${planOutput}"
     echo
-    if echo "${planOutput}" | egrep '^-{72}$' &> /dev/null; then
-        planOutput=$(echo "${planOutput}" | sed -n -r '/-{72}/,/-{72}/{ /-{72}/d; p }')
+    planOutputMarker='An execution plan has been generated and is shown below\.'
+    if echo "${planOutput}" | egrep "^${planOutputMarker}$" &> /dev/null; then
+        planOutput=$(echo "${planOutput}" | sed -n -r "/^${planOutputMarker}$/,/-{72}/{ /-{72}/d; p}")
     fi
     planOutput=$(echo "${planOutput}" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
 
